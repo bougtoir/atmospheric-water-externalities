@@ -1,0 +1,12 @@
+file,source_url,retrieved,bytes,sha256,method
+q01.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),644154,1b03bd65445613d152c3f13358bd1e40834c05b9e7e6d5fee1e4769ec0a4edaf,curl
+q02.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),605541,eb600dd50a9871e8cb29aef9ae415cd1d50d251a7d636635cfaf988a3f7b6316,curl
+q03.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),575036,63ab89bcf0520ac74eb5d8d2e9dc77a252751a79ed667bcd5eaac04acd031b89,curl
+q04.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),616167,41c1bdc09aac0ee29182e962aa9ae1e46f5424ab5eec86dd1d74b054cade6c5d,curl
+q05.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),729070,343b8c3cac72be2f185b01de690fa80c8efd86447890559b42469270d0b911aa,curl
+q06.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),759668,253e6ac7c04cfff35eb9f068efa619886b63fd800e573d69ee3d84d4ffce2930,curl
+q07.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),604439,aedea7be30a5bca1dbf3b3ffdbe1cacdd4889b154bf2e53bfa71224b3680f093,curl
+q08.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),557367,32aca344fd7085482f4ba807633e6d0e08f17288c029c21ccd5f8d4ca63d0377,curl
+q09.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),601049,f07cc5922d1886ec2ef5cf8f142824b46a280f454e361aa0ab654d6261d98098,curl
+q10.json,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),716422,d79832605cb40f0c303a5c9e1ae71a2ac7629b5f7f7d4a6c6c8b1fd1badc7506,curl
+queries.txt,https://api.openalex.org/works?search=<see queries.txt>&per-page=25 (first page only; not exhaustive),2026-11-05T23:1xZ (UTC date 2026-11-05),516,5bcd326f9d476168ac7036a7e62225e2f334d0e72750ac2b2e770cf9363d80e1,curl
