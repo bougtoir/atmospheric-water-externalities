@@ -12,28 +12,38 @@ from shapely.geometry import shape
 G = 9.80665
 case = sys.argv[1]; spin = int(sys.argv[2]) if len(sys.argv) > 2 else 24
 R = f"wrf_runs/{case}"; OUT = f"results/wrf/{case}"; os.makedirs(OUT, exist_ok=True)
-exps = sorted(d for d in os.listdir(R) if os.path.isdir(f"{R}/{d}") and glob.glob(f"{R}/{d}/wrfout_d01_*"))
+exps = sorted(d for d in os.listdir(R) if os.path.isdir(f"{R}/{d}") and glob.glob(f"{R}/{d}/wrfout_d01_*")
+              and "SUCCESS COMPLETE WRF" in open(f"{R}/{d}/rsl.error.0000", errors="ignore").read())
 
 
-def open_set(e, pat):
-    fs = sorted(glob.glob(f"{R}/{e}/{pat}"))
-    ds = xr.concat([xr.open_dataset(f, decode_times=False) for f in fs], "Time", data_vars="minimal", coords="minimal", compat="override")
-    t = pd.to_datetime([x.decode() if isinstance(x, bytes) else b"".join(x).decode() for x in ds.Times.values], format="%Y-%m-%d_%H:%M:%S")
-    return ds.assign_coords(Time=t)
+HVARS = ["Times", "U", "V", "W", "PH", "PHB", "HGT", "MU", "MUB", "C1H", "C2H", "DNW", "QVAPOR", "QCLOUD", "QRAIN",
+         "QICE", "QSNOW", "QGRAUP", "MAPFAC_M", "XLAT", "XLONG"]
+SVARS = ["Times", "RAINC", "RAINNC", "SFCEVP", "U10", "V10", "T2", "Q2", "LH", "HFX", "PBLH", "POWER"]
+
+
+def times(ds):
+    return pd.to_datetime([x.decode() if isinstance(x, bytes) else b"".join(x).decode() for x in ds.Times.values],
+                          format="%Y-%m-%d_%H:%M:%S")
+
+
+def open_sfc(e):
+    fs = sorted(glob.glob(f"{R}/{e}/wrfsfc_d01_*")); parts = []
+    for f in fs:
+        d = xr.open_dataset(f, decode_times=False)
+        parts.append(d[[v for v in SVARS if v in d]].load()); d.close()
+    s = xr.concat(parts, "Time")
+    return s.assign_coords(Time=times(s))
 
 
 def column(ds):
     """Dry-air layer mass (kg m-2), vapour/condensate columns, vertically integrated vapour flux."""
-    mut = ds.MU + ds.MUB
-    dpd = -(ds.C1H * mut + ds.C2H) * ds.DNW / G            # kg m-2 per layer, positive
-    q = ds.QVAPOR
-    cond = sum(ds[v] for v in ("QCLOUD", "QRAIN", "QICE", "QSNOW", "QGRAUP") if v in ds)
+    mut = (ds.MU + ds.MUB).values[:, None]
+    dpd = -(ds.C1H.values[:, :, None, None] * mut + ds.C2H.values[:, :, None, None]) * ds.DNW.values[:, :, None, None] / G
+    q = ds.QVAPOR.values
+    cond = sum(ds[v].values for v in ("QCLOUD", "QRAIN", "QICE", "QSNOW", "QGRAUP") if v in ds)
     u = 0.5 * (ds.U.values[..., 1:] + ds.U.values[..., :-1])
     v = 0.5 * (ds.V.values[..., 1:, :] + ds.V.values[..., :-1, :])
-    w = (q * dpd).sum("bottom_top").values
-    c = (cond * dpd).sum("bottom_top").values
-    qx = (q.values * u * dpd.values).sum(1); qy = (q.values * v * dpd.values).sum(1)
-    return w, c, qx, qy
+    return (q * dpd).sum(1), (cond * dpd).sum(1), (q * u * dpd).sum(1), (q * v * dpd).sum(1)
 
 
 def hub_wind(ds, z_hub=100.0):
@@ -62,32 +72,41 @@ def countries(lat, lon):
 qc, data = {}, {}
 for e in exps:
     rsl = open(f"{R}/{e}/rsl.error.0000", errors="ignore").read()
-    h, s = open_set(e, "wrfout_d01_*"), open_set(e, "wrfsfc_d01_*")
-    w, c, qx, qy = column(h)
-    exp_frames = int((h.Time.values[-1] - h.Time.values[0]) / np.timedelta64(3, "h")) + 1
-    dt3 = np.diff(h.Time.values) / np.timedelta64(1, "h")
+    s = open_sfc(e)
+    t0 = s.Time.values[0]; tspin = t0 + np.timedelta64(spin, "h")
+    acc = dict(w=0, c=0, qx=0, qy=0, hub=0); n = 0; ht = []; nonfin = neg = 0; qmin = np.inf; wmax = umax = 0.0
+    geo = None
+    for f in sorted(glob.glob(f"{R}/{e}/wrfout_d01_*")):
+        d = xr.open_dataset(f, decode_times=False); h = d[[v for v in HVARS if v in d]].load(); d.close()
+        tt = times(h); ht += list(tt)
+        if geo is None: geo = dict(lat=h.XLAT.values[0], lon=h.XLONG.values[0], mf=h.MAPFAC_M.values[0])
+        q = h.QVAPOR.values; nonfin += int((~np.isfinite(q)).sum()); neg += int((q < 0).sum()); qmin = min(qmin, float(q.min()))
+        wmax = max(wmax, float(abs(h.W).max())); umax = max(umax, float(abs(h.U).max()))
+        w, c, qx, qy = column(h); hub = hub_wind(h); sel = np.asarray(tt >= tspin)
+        for k, v in dict(w=w, c=c, qx=qx, qy=qy, hub=hub).items(): acc[k] = acc[k] + v[sel].sum(0)
+        n += int(sel.sum()); del h
+    ht = pd.DatetimeIndex(ht)
+    exp_frames = int((ht[-1] - ht[0]) / pd.Timedelta(hours=3)) + 1
+    dt3 = np.diff(ht.values) / np.timedelta64(1, "h")
     pr = (s.RAINC + s.RAINNC).values
     num = dict(success="SUCCESS COMPLETE WRF" in rsl, cfl_messages=len(re.findall(r"cfl", rsl, re.I)),
-               history_frames=int(h.sizes["Time"]), history_frames_expected=exp_frames,
+               history_frames=len(ht), history_frames_expected=exp_frames,
                history_interval_h_unique=sorted(set(dt3.round(3).tolist())), sfc_frames=int(s.sizes["Time"]),
-               nonfinite_qvapor=int((~np.isfinite(h.QVAPOR.values)).sum()), negative_qvapor=int((h.QVAPOR.values < 0).sum()),
-               min_qvapor=float(h.QVAPOR.min()), max_abs_w_ms=float(abs(h.W).max()) if "W" in h else None,
+               nonfinite_qvapor=nonfin, negative_qvapor=neg, min_qvapor=qmin, max_abs_w_ms=wmax,
                precip_monotone=bool((np.diff(pr, axis=0) >= -1e-3).all()), max_precip_mm=float(pr[-1].max()),
-               max_u_ms=float(abs(h.U).max()), t2_range_K=[float(s.T2.min()), float(s.T2.max())])
-    # boundary discontinuity: accumulated precip in the 5-cell relaxation zone vs. the next 5 cells inward
-    p = pr[-1] - pr[np.searchsorted(s.Time.values, s.Time.values[0] + np.timedelta64(spin, "h"))]
+               max_u_ms=umax, t2_range_K=[float(s.T2.min()), float(s.T2.max())])
+    p = pr[-1] - pr[np.searchsorted(s.Time.values, tspin)]
     ring = lambda a, b: np.r_[p[a:b, :].ravel(), p[-b:p.shape[0] - a or None, :].ravel(), p[:, a:b].ravel(), p[:, -b:p.shape[1] - a or None].ravel()]
     num["bdy_zone_mean_precip_mm"] = float(ring(0, 5).mean()); num["inner_ring_mean_precip_mm"] = float(ring(5, 10).mean())
     qc[e] = num
-    data[e] = dict(h=h, s=s, w=w, c=c, qx=qx, qy=qy)
+    data[e] = dict(s=s, geo=geo, **{k: v / max(n, 1) for k, v in acc.items()})
 json.dump(qc, open(f"{OUT}/qc.json", "w"), indent=1, default=str)
 
-ref = data["CONTROL"]; s0 = ref["s"]; h0 = ref["h"]
-lat, lon = h0.XLAT.values[0], h0.XLONG.values[0]
+ref = data["CONTROL"]; s0 = ref["s"]
+lat, lon, mf = ref["geo"]["lat"], ref["geo"]["lon"], ref["geo"]["mf"]
 lab = countries(lat, lon)
-mf = h0.MAPFAC_M.values[0]; area = (15000.0 / mf) ** 2
+area = (15000.0 / mf) ** 2
 it_s = np.searchsorted(s0.Time.values, s0.Time.values[0] + np.timedelta64(spin, "h"))
-it_h = np.searchsorted(h0.Time.values, h0.Time.values[0] + np.timedelta64(spin, "h"))
 inner = np.zeros(lat.shape, bool); inner[10:-10, 10:-10] = True
 farm = np.zeros(lat.shape, bool)
 if os.path.exists(f"{R}/WIND/windturbines.txt"):
@@ -98,12 +117,11 @@ if os.path.exists(f"{R}/WIND/windturbines.txt"):
 
 
 def summarise(e):
-    d = data[e]; s, h = d["s"], d["h"]
+    d = data[e]; s = d["s"]
     P = (s.RAINC + s.RAINNC).values; Pacc = P[-1] - P[it_s]
     E = s.SFCEVP.values; Eacc = E[-1] - E[it_s]
-    hub = hub_wind(h)[it_h:].mean(0)
-    out = dict(P_acc_mm=Pacc, E_acc_mm=Eacc, W=d["w"][it_h:].mean(0), IVTx=d["qx"][it_h:].mean(0), IVTy=d["qy"][it_h:].mean(0),
-               hub_wind=hub, U10=np.hypot(s.U10, s.V10).values[it_s:].mean(0), T2=s.T2.values[it_s:].mean(0), Q2=s.Q2.values[it_s:].mean(0),
+    out = dict(P_acc_mm=Pacc, E_acc_mm=Eacc, W=d["w"], COND=d["c"], IVTx=d["qx"], IVTy=d["qy"], hub_wind=d["hub"],
+               U10=np.hypot(s.U10, s.V10).values[it_s:].mean(0), T2=s.T2.values[it_s:].mean(0), Q2=s.Q2.values[it_s:].mean(0),
                LH=s.LH.values[it_s:].mean(0), HFX=s.HFX.values[it_s:].mean(0), PBLH=s.PBLH.values[it_s:].mean(0))
     if "POWER" in s: out["POWER"] = s.POWER.values[it_s:].mean(0)
     return out
