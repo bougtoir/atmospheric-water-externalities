@@ -15,8 +15,11 @@ import numpy as np, pandas as pd
 run, date = sys.argv[1], sys.argv[2]
 cty = None if len(sys.argv) < 4 or sys.argv[3] == "ALL" else sys.argv[3].split(",")
 dom = json.load(open(os.path.join(run, "domain_bounds.json")))
+# The register stacks national registries (DE MaStR, DK Stamdata) on top of EWW for the same offshore
+# turbines (median nearest-neighbour distance 4–12 m); a single source avoids double-counting.
+SOURCE = "eww"
 t = pd.read_csv("data/raw/turbines_from_ecm_wind_heatwave.csv", parse_dates=["commissioning"])
-o = t[(t.offshore == True) & t.commissioning.notna() & (t.commissioning < date) & t.capacity_mw.notna()].copy()
+o = t[(t.offshore == True) & (t.source == SOURCE) & t.commissioning.notna() & (t.commissioning < date) & t.capacity_mw.notna()].copy()
 o = o[(o.lat > dom["lat_min"]) & (o.lat < dom["lat_max"]) & (o.lon > dom["lon_min"]) & (o.lon < dom["lon_max"])]
 if cty:
     o = o[o.country.isin(cty)]

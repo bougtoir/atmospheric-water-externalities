@@ -42,7 +42,10 @@ for X in $EXPS; do
     C=$CTY; [ "$X" != "WIND" ] && C=${X#WIND_}
     cp $R/domain_bounds.json $D/; (cd $ROOT && $PY scripts/wrf/w2_turbines.py $D ${START%T*} $C) > $R/logs/turbines_$X.log
   fi
-  if [ ! -f wrfinput_d01 ]; then mpirun -np $NP ./real.exe > $R/logs/real_$X.log 2>&1; cp rsl.error.0000 $R/logs/real_$X.rsl; fi
+  if [ ! -f wrfinput_d01 ]; then
+    mpirun -np $NP ./real.exe > $R/logs/real_$X.log 2>&1; cp rsl.error.0000 $R/logs/real_$X.rsl
+    [ "${X#CTLPERT}" != "$X" ] && $PY $ROOT/scripts/wrf/w4b_perturb_ic.py $D $CASE-$X > $R/logs/perturb_$X.log
+  fi
   if ! grep -q "SUCCESS COMPLETE WRF" rsl.error.0000 2>/dev/null || ! ls wrfout_d01_* >/dev/null 2>&1; then
     t0=$(date +%s); mpirun -np $NP ./wrf.exe > $R/logs/wrf_$X.log 2>&1; t1=$(date +%s)
     cp rsl.error.0000 $R/logs/wrf_$X.rsl; echo "$X wallclock_s $((t1-t0))" >> $R/logs/timing.txt
