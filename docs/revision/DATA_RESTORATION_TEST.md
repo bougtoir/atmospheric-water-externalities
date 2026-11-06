@@ -21,3 +21,9 @@ Result: **240/240 objects verified**. The read-back directory was deleted afterw
 WRF NetCDF files were archived after lossless deflate compression; each compressed file was checked
 variable-by-variable against its original before replacement (`COMPRESSION_LEDGER.csv` in each run directory
 records both SHA-256 values).
+
+## Read-back 3 — WRF case e2017w (2026-11-06)
+
+Private archive commit `9fea214` (push exit 0). Fresh clone into an empty directory and
+`restore_project_data.py --check-only` for `wrf_e2017w`, `wrf_e2017w_CONTROL`, `wrf_e2017w_WIND`,
+`wrf_e2017w_logs`: **193/193 objects verified**. Read-back directory deleted afterwards.
