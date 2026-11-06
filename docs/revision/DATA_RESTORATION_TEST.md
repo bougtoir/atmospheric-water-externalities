@@ -27,3 +27,9 @@ records both SHA-256 values).
 Private archive commit `9fea214` (push exit 0). Fresh clone into an empty directory and
 `restore_project_data.py --check-only` for `wrf_e2017w`, `wrf_e2017w_CONTROL`, `wrf_e2017w_WIND`,
 `wrf_e2017w_logs`: **193/193 objects verified**. Read-back directory deleted afterwards.
+
+## Read-back: pilot valid CTLPERT_1, logs v2, analysis (private archive commit 2116617)
+
+Datasets `wrf_pilot_2020w1_CTLPERT_1`, `wrf_pilot_2020w1_logs_v2`, `wrf_pilot_2020w1_analysis` were pushed
+(exit 0) and restored into an empty directory with `archive/restore_project_data.py --check-only`:
+50/50 objects verified by SHA-256. The read-back directory was removed after verification.
