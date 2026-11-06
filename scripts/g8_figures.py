@@ -29,9 +29,10 @@ yr = years[-1]; owner = M[f"owner_{yr}"]
 fig, ax = plt.subplots(figsize=(6, 4.2))
 ax.imshow(np.where(land, 0.85, 1.0), extent=ext, cmap="gray", vmin=0, vmax=1, aspect="auto")
 for k, pm in enumerate(M[f"placebo_{yr}"]):
-    ii, jj = np.nonzero(pm); ax.scatter(lon[jj], lat[ii], s=2, c="tab:gray", marker="s", label="placebo cells" if k == 0 else None)
-for o in sorted(set(owner[owner != ""])):
-    ii, jj = np.nonzero(owner == o); ax.scatter(lon[jj], lat[ii], s=4, marker="s", label=f"farm cells {o}")
+    ii, jj = np.nonzero(pm); ax.scatter(lon[jj], lat[ii], s=1.5, c="0.55", marker="s", label="placebo cells (5 sets)" if k == 0 else None)
+pal = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple", "tab:brown", "tab:pink", "tab:olive", "tab:cyan"]
+for o, col in zip(sorted(set(owner[owner != ""])), pal):
+    ii, jj = np.nonzero(owner == o); ax.scatter(lon[jj], lat[ii], s=5, c=col, marker="s", label=f"farm cells {o}")
 ax.set_xlim(-8, 25); ax.set_ylim(48, 62); ax.set_xlabel("Longitude (°E)"); ax.set_ylabel("Latitude (°N)")
 ax.legend(fontsize=6, ncol=2, loc="upper right"); ax.set_title(f"Offshore wind-farm source cells, {yr} (0.25°)"); save(fig, 2)
 

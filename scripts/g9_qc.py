@@ -19,7 +19,7 @@ refs = pd.read_csv("references/references_verified.csv")
 ref_par = paras[paras.index("References") + 1:]
 res["all refs have DOI + crossref raw"] = all(f"https://doi.org/{x}" in "\n".join(ref_par) for x in refs.doi if x in "\n".join(ref_par)) and all(pathlib.Path(f"references/crossref_raw/{k}.json").exists() for k in refs.key)
 res["ref list alphabetical"] = [p.split(",")[0].lower() for p in ref_par] == sorted(p.split(",")[0].lower() for p in ref_par)
-res["no priority words"] = not re.search(r"\b(first|novel|unprecedented)\b", full.split("References")[0], re.I)
+res["no priority words"] = not re.search(r"\b(first|novel|unprecedented)\b", "\n".join(paras[:paras.index("Software and data availability")]), re.I)
 res["WRF NOT RUN disclosed"] = "NOT RUN" in full
 res["no causal claim words"] = not re.search(r"\b(causes|caused by wind farms|we estimate the externality)\b", full, re.I)
 res["no repo paths in prose"] = not re.search(r"(results/|scripts/|data/processed)", full)

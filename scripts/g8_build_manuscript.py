@@ -136,7 +136,7 @@ Pp("The supply channel routes perturbed source evaporation with unchanged winds 
    "dynamic channel collects every other response (flow deceleration, convergence, boundary-layer and cloud changes) "
    "and acts on all moisture, not only on the tagged fraction. Results are labelled [A] accounting (Eq. 3), "
    "[S] scenario (Eq. 5 for a stated ΔE_S) or [C] causal estimate (Eq. 4 from an executed counterfactual pair). "
-   "This study produces [A] and [S] results only.")
+   "This study produces [A] and [S] results only (Fig. 1).")
 
 H("3. Software, data and evaluation design")
 H("3.1. Tagging tool", 2)
@@ -187,8 +187,10 @@ Pp(f"Across seasons, {pct(V['land_mean'])} (range {pct(V['land_min'])}–{pct(V[
    f"{V['tb_owner_min']} to {V['tb_ratio_max']:.0f} for {V['tb_owner_max']}; Table 1).")
 H("4.4. Placebo test", 2)
 Pp(f"For {V['pl_inside']} of {V['pl_n']} land receptors the real-source coefficient lay within the range of placebo "
-   f"sources (Fig. 5). Coefficients outside the placebo range indicate that the specific location of the farm clusters "
-   f"matters for accounting, but location-specific accounting is still not an effect of the infrastructure (Section 4.2).")
+   f"sources (Fig. 5)" + (". Transfer coefficients therefore describe the meteorology of the North Sea and Baltic "
+   "source areas rather than anything specific to the farm locations." if V["pl_inside"] == V["pl_n"] else
+   ". Coefficients outside the placebo range show that the specific farm locations matter for accounting, but "
+   "location-specific accounting is still not an effect of the infrastructure (Section 4.2)."))
 H("4.5. Detectability [S]", 2)
 Pp(f"Farm-cell evaporation of tagged origin contributes at most {pct(V['A_over_P_max'],2)} of summer precipitation in any "
    f"receptor ({V['A_over_P_max_c']}). With five seasons before and after build-out, detecting the supply channel would "

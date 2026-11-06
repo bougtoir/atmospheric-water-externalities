@@ -1,0 +1,21 @@
+{
+ "abstract<=150": true,
+ "keywords 1-7": true,
+ "highlights 3-5 <=85": true,
+ "software availability section": true,
+ "CRediT + competing + GenAI sections": true,
+ "acknowledgements before references": true,
+ "no inline images (figures separate)": true,
+ "figures cited 1..6 in order": true,
+ "figure files present": true,
+ "table cited": true,
+ "all refs have DOI + crossref raw": true,
+ "ref list alphabetical": true,
+ "no priority words": true,
+ "WRF NOT RUN disclosed": true,
+ "no causal claim words": true,
+ "no repo paths in prose": true,
+ "numeric provenance (0 unmatched)": true,
+ "zip ok, relative names": true,
+ "unmatched": []
+}
