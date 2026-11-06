@@ -27,7 +27,7 @@ def times(ds):
 
 
 def open_sfc(e):
-    fs = sorted(glob.glob(f"{R}/{e}/wrfsfc_d01_*")); parts = []
+    fs = sorted(glob.glob(f"{R}/{e}/wrfsfc_d01_????-??-??_??:??:??")); parts = []
     for f in fs:
         d = xr.open_dataset(f, decode_times=False)
         parts.append(d[[v for v in SVARS if v in d]].load()); d.close()
@@ -76,7 +76,7 @@ for e in exps:
     t0 = s.Time.values[0]; tspin = t0 + np.timedelta64(spin, "h")
     acc = dict(w=0, c=0, qx=0, qy=0, hub=0); n = 0; ht = []; nonfin = neg = 0; qmin = np.inf; wmax = umax = 0.0
     geo = None
-    for f in sorted(glob.glob(f"{R}/{e}/wrfout_d01_*")):
+    for f in sorted(glob.glob(f"{R}/{e}/wrfout_d01_????-??-??_??:??:??")):
         d = xr.open_dataset(f, decode_times=False); h = d[[v for v in HVARS if v in d]].load(); d.close()
         tt = times(h); ht += list(tt)
         if geo is None: geo = dict(lat=h.XLAT.values[0], lon=h.XLONG.values[0], mf=h.MAPFAC_M.values[0])

@@ -10,7 +10,7 @@ Chronological record of WRF runs, failures and corrections. Run status and wall-
 | CONTROL | SUCCESS COMPLETE WRF | `windfarm_opt=0` |
 | WIND | SUCCESS COMPLETE WRF | `windfarm_opt=1`, EWW offshore fleet (see TURBINE_INVENTORY_AUDIT.md) |
 | CTLPERT_1 (first attempt) | completed, **INVALID** | see defect D1; directory retained as `CTLPERT_1_INVALID_unperturbed_THM` for audit |
-| CTLPERT_1 (rerun) | queued (`scripts/wrf/w6b_queue.sh`) | THM perturbed consistently with T |
+| CTLPERT_1 (rerun) | running | THM perturbed consistently with T; divergence from CONTROL confirmed in output frames 1–2 (max |ΔT| 0.78–0.98 K, max |ΔU| 3.2–3.6 m/s) |
 
 ### Defect D1 — noise reference not perturbed
 
@@ -28,5 +28,12 @@ has completed.
 
 | run | status |
 |---|---|
-| CONTROL | running |
-| WIND | queued |
+| CONTROL | SUCCESS COMPLETE WRF |
+| WIND | SUCCESS COMPLETE WRF |
+
+QC and paired contrasts: `results/wrf/e2017w/`, rendered in `docs/revision/wrf_cases/e2017w_*.md`.
+
+### Defect D2 — analysis globbed compression temporaries
+
+`w5_analyse_case.py` globbed `wrfout_d01_*`, which also matched `*.z.tmp` files being written by the compression
+watcher, and failed with an HDF error. File patterns now require the exact WRF timestamp form.
