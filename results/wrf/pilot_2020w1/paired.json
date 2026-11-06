@@ -1,0 +1,92 @@
+{
+ "case": "pilot_2020w1",
+ "spinup_h": 24,
+ "window": [
+  "2020-07-01T00:00:00.000000000",
+  "2020-07-06T00:00:00.000000000"
+ ],
+ "n_farm_cells": 141,
+ "inner_cells": 10800,
+ "paired": {
+  "WIND": {
+   "P_acc_mm": {
+    "domain_inner_mean": -0.022237597033381462,
+    "farm_cells_mean": 0.43514496088027954,
+    "inner_abs_max": 26.391149520874023
+   },
+   "E_acc_mm": {
+    "domain_inner_mean": 0.006731777917593718,
+    "farm_cells_mean": 0.07987887412309647,
+    "inner_abs_max": 1.9877033233642578
+   },
+   "W": {
+    "domain_inner_mean": -0.0017279642634093761,
+    "farm_cells_mean": -0.0029442834202200174,
+    "inner_abs_max": 0.2245941162109375
+   },
+   "COND": {
+    "domain_inner_mean": -0.0001207169916597195,
+    "farm_cells_mean": 0.0018281962256878614,
+    "inner_abs_max": 0.1122286468744278
+   },
+   "IVTx": {
+    "domain_inner_mean": -0.036478977650403976,
+    "farm_cells_mean": -0.7673600912094116,
+    "inner_abs_max": 3.6718597412109375
+   },
+   "IVTy": {
+    "domain_inner_mean": -0.005831205751746893,
+    "farm_cells_mean": -0.071426622569561,
+    "inner_abs_max": 2.572389602661133
+   },
+   "hub_wind": {
+    "domain_inner_mean": -0.01117414515465498,
+    "farm_cells_mean": -0.34643644094467163,
+    "inner_abs_max": 1.0911016464233398
+   },
+   "U10": {
+    "domain_inner_mean": -0.0012707621790468693,
+    "farm_cells_mean": -0.04959011450409889,
+    "inner_abs_max": 0.43657493591308594
+   },
+   "T2": {
+    "domain_inner_mean": 0.0011049878085032105,
+    "farm_cells_mean": 0.010740023106336594,
+    "inner_abs_max": 0.13140869140625
+   },
+   "Q2": {
+    "domain_inner_mean": -1.02124920431379e-06,
+    "farm_cells_mean": -2.3855260224081576e-05,
+    "inner_abs_max": 0.00010489858686923981
+   },
+   "LH": {
+    "domain_inner_mean": 0.041248150169849396,
+    "farm_cells_mean": 0.4743240475654602,
+    "inner_abs_max": 11.266777038574219
+   },
+   "HFX": {
+    "domain_inner_mean": -0.009910248219966888,
+    "farm_cells_mean": -0.28521451354026794,
+    "inner_abs_max": 9.622936248779297
+   },
+   "PBLH": {
+    "domain_inner_mean": 0.39887890219688416,
+    "farm_cells_mean": 9.165558815002441,
+    "inner_abs_max": 46.94873046875
+   },
+   "P_inner_total_kg": {
+    "control": 54649079988224.0,
+    "diff": -53980848128.0
+   },
+   "E_inner_total_kg": {
+    "control": 42449313464320.0,
+    "diff": 16373863424.0
+   },
+   "E_farm_total_kg": {
+    "control": 411552645120.0,
+    "diff": 2545196032.0
+   },
+   "mean_power_GW": 13.775236129760742
+  }
+ }
+}
