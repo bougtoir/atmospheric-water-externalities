@@ -1,0 +1,47 @@
+{
+ "criterion": "Prespecified WRF event selection from archived ERA5 column fields (no treatment information used).\n\nCriterion (fixed before any WRF run): non-overlapping 5-day JJA windows ranked by mean eastward vertically\nintegrated vapour flux across the North Sea gate 3-8E, 52-57N (onshore transport toward the continent),\nrequiring domain-mean precipitation over 5-20E, 47-56N above the JJA median. Regimes: top windows\n(westerly), plus the highest-ranked window with mean northward flux >0 (southerly) and <0 (northerly).",
+ "precip_median_mm_day": 2.6882921397686004,
+ "n_windows": 528,
+ "events": [
+  {
+   "start": "2020-07-01",
+   "end": "2020-07-05",
+   "fe": 363.915,
+   "fn": 101.352,
+   "pr": 2.961,
+   "regime": "westerly"
+  },
+  {
+   "start": "2017-06-22",
+   "end": "2017-06-26",
+   "fe": 344.411,
+   "fn": 17.859,
+   "pr": 2.711,
+   "regime": "westerly"
+  },
+  {
+   "start": "2016-07-08",
+   "end": "2016-07-12",
+   "fe": 320.771,
+   "fn": 111.46,
+   "pr": 2.999,
+   "regime": "westerly"
+  },
+  {
+   "start": "2016-08-04",
+   "end": "2016-08-08",
+   "fe": 272.333,
+   "fn": 29.613,
+   "pr": 2.948,
+   "regime": "southwesterly"
+  },
+  {
+   "start": "2021-08-14",
+   "end": "2021-08-18",
+   "fe": 284.117,
+   "fn": -74.744,
+   "pr": 3.356,
+   "regime": "northwesterly"
+  }
+ ]
+}
