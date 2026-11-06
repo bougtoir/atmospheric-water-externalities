@@ -10,3 +10,4 @@ data/raw/era5_wrf/*.part
 data/raw/wps_geog/
 wrf_runs/
 .archive/
+results/wrf/*/maps.nc
