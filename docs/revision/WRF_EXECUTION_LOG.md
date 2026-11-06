@@ -10,7 +10,7 @@ Chronological record of WRF runs, failures and corrections. Run status and wall-
 | CONTROL | SUCCESS COMPLETE WRF | `windfarm_opt=0` |
 | WIND | SUCCESS COMPLETE WRF | `windfarm_opt=1`, EWW offshore fleet (see TURBINE_INVENTORY_AUDIT.md) |
 | CTLPERT_1 (first attempt) | completed, **INVALID** | see defect D1; directory retained as `CTLPERT_1_INVALID_unperturbed_THM` for audit |
-| CTLPERT_1 (rerun) | running | THM perturbed consistently with T; divergence from CONTROL confirmed in output frames 1–2 (max |ΔT| 0.78–0.98 K, max |ΔU| 3.2–3.6 m/s) |
+| CTLPERT_1 (rerun) | SUCCESS COMPLETE WRF | THM perturbed consistently with T; divergence from CONTROL confirmed in output frames 1–2 (max |ΔT| 0.78–0.98 K, max |ΔU| 3.2–3.6 m/s) |
 
 ### Defect D1 — noise reference not perturbed
 

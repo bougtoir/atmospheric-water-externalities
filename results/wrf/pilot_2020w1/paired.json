@@ -8,6 +8,85 @@
  "n_farm_cells": 141,
  "inner_cells": 10800,
  "paired": {
+  "CTLPERT_1": {
+   "P_acc_mm": {
+    "domain_inner_mean": -0.01596364937722683,
+    "farm_cells_mean": -0.119596928358078,
+    "inner_abs_max": 21.059783935546875
+   },
+   "E_acc_mm": {
+    "domain_inner_mean": 0.008519141934812069,
+    "farm_cells_mean": 0.0049635665491223335,
+    "inner_abs_max": 1.7771778106689453
+   },
+   "W": {
+    "domain_inner_mean": -3.5680928704096004e-05,
+    "farm_cells_mean": -0.0062306588515639305,
+    "inner_abs_max": 0.3477783203125
+   },
+   "COND": {
+    "domain_inner_mean": -0.0003559887991286814,
+    "farm_cells_mean": -0.0009910891531035304,
+    "inner_abs_max": 0.11522641777992249
+   },
+   "IVTx": {
+    "domain_inner_mean": 0.042222339659929276,
+    "farm_cells_mean": 0.007242081221193075,
+    "inner_abs_max": 3.5683822631835938
+   },
+   "IVTy": {
+    "domain_inner_mean": 0.00046253911568783224,
+    "farm_cells_mean": 0.03363121300935745,
+    "inner_abs_max": 3.1617329120635986
+   },
+   "hub_wind": {
+    "domain_inner_mean": 0.0023808274418115616,
+    "farm_cells_mean": 0.008101392537355423,
+    "inner_abs_max": 0.33974552154541016
+   },
+   "U10": {
+    "domain_inner_mean": 0.00177433539647609,
+    "farm_cells_mean": 0.005964857526123524,
+    "inner_abs_max": 0.2753105163574219
+   },
+   "T2": {
+    "domain_inner_mean": 0.0027349372394382954,
+    "farm_cells_mean": -0.0016247904859483242,
+    "inner_abs_max": 0.1923828125
+   },
+   "Q2": {
+    "domain_inner_mean": 1.2359165566522279e-06,
+    "farm_cells_mean": 3.977242784003465e-07,
+    "inner_abs_max": 8.583161979913712e-05
+   },
+   "LH": {
+    "domain_inner_mean": 0.03800623118877411,
+    "farm_cells_mean": 0.021227460354566574,
+    "inner_abs_max": 11.19832992553711
+   },
+   "HFX": {
+    "domain_inner_mean": 0.008853225037455559,
+    "farm_cells_mean": -0.014354133047163486,
+    "inner_abs_max": 10.168067932128906
+   },
+   "PBLH": {
+    "domain_inner_mean": 0.005636935587972403,
+    "farm_cells_mean": -0.4031839668750763,
+    "inner_abs_max": 46.0870361328125
+   },
+   "P_inner_total_kg": {
+    "control": 54649079988224.0,
+    "diff": -38795337728.0
+   },
+   "E_inner_total_kg": {
+    "control": 42449313464320.0,
+    "diff": 20649115648.0
+   },
+   "E_farm_total_kg": {
+    "control": 411552645120.0,
+    "diff": 159122992.0
+   }
+  },
   "WIND": {
    "P_acc_mm": {
     "domain_inner_mean": -0.022237597033381462,

@@ -12,7 +12,7 @@ from shapely.geometry import shape
 G = 9.80665
 case = sys.argv[1]; spin = int(sys.argv[2]) if len(sys.argv) > 2 else 24
 R = f"wrf_runs/{case}"; OUT = f"results/wrf/{case}"; os.makedirs(OUT, exist_ok=True)
-exps = sorted(d for d in os.listdir(R) if os.path.isdir(f"{R}/{d}") and glob.glob(f"{R}/{d}/wrfout_d01_*")
+exps = sorted(d for d in os.listdir(R) if os.path.isdir(f"{R}/{d}") and "INVALID" not in d and glob.glob(f"{R}/{d}/wrfout_d01_*")
               and "SUCCESS COMPLETE WRF" in open(f"{R}/{d}/rsl.error.0000", errors="ignore").read())
 
 

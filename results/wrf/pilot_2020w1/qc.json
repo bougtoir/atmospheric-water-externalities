@@ -22,6 +22,29 @@
   "bdy_zone_mean_precip_mm": 13.594721794128418,
   "inner_ring_mean_precip_mm": 37.009986877441406
  },
+ "CTLPERT_1": {
+  "success": true,
+  "cfl_messages": 0,
+  "history_frames": 49,
+  "history_frames_expected": 49,
+  "history_interval_h_unique": [
+   3.0
+  ],
+  "sfc_frames": 145,
+  "nonfinite_qvapor": 0,
+  "negative_qvapor": 0,
+  "min_qvapor": 1.000000013351432e-10,
+  "max_abs_w_ms": 5.26273250579834,
+  "precip_monotone": true,
+  "max_precip_mm": 261.2245178222656,
+  "max_u_ms": 79.70245361328125,
+  "t2_range_K": [
+   264.3082580566406,
+   307.1978759765625
+  ],
+  "bdy_zone_mean_precip_mm": 13.563655853271484,
+  "inner_ring_mean_precip_mm": 37.17525100708008
+ },
  "WIND": {
   "success": true,
   "cfl_messages": 0,
