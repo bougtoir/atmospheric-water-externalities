@@ -41,9 +41,9 @@ kt = pd.read_csv("results/known_truth.csv")
 fig, axs = plt.subplots(1, 2, figsize=(7.2, 2.8), sharey=True)
 for ax, c in zip(axs, ("C1", "C2")):
     s = kt[(kt.receptor == c) & (kt.dE_frac == kt.dE_frac.max())]
-    lab = [f"δk={a:+.2f}\nδu={b:+.1f}" for a, b in zip(s.delta_k, s.delta_u)]
+    lab = [f"{a:+.2f}/{b:+.1f}" for a, b in zip(s.delta_k, s.delta_u)]
     x = np.arange(len(s)); ax.bar(x - 0.2, s.truth_kg / 1e9, 0.4, label="truth P(I)−P(no I)"); ax.bar(x + 0.2, s.supply_kg / 1e9, 0.4, label="supply estimator")
-    ax.axhline(0, c="k", lw=0.5); ax.set_xticks(x); ax.set_xticklabels(lab, fontsize=5); ax.set_title(f"Receptor {c} ({'near' if c=='C1' else 'far'})")
+    ax.axhline(0, c="k", lw=0.5); ax.set_xticks(x); ax.set_xticklabels(lab, fontsize=6, rotation=45, ha="right"); ax.set_xlabel("δk / δu"); ax.set_title(f"Receptor {c} ({'near' if c=='C1' else 'far'})")
 axs[0].set_ylabel("Δ precipitation (10⁹ kg)"); axs[0].legend(fontsize=6); save(fig, 3)
 
 # Figure 4: mean tagged precipitation map (ALL tag), mm per season
