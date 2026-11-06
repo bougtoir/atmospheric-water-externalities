@@ -60,7 +60,10 @@ def main():
                 sys.exit(f"REFUSE overwrite with different content: {dst}")
         else:
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            shutil.copy2(p, dst)
+            try:
+                os.link(p, dst)  # same filesystem: no duplicate bytes; in-place rewrites of p use new inodes
+            except OSError:
+                shutil.copy2(p, dst)
             if sha256(dst) != h:
                 sys.exit(f"copy checksum mismatch: {dst}")
         r = rows.get(oid, {k: "" for k in FIELDS})
