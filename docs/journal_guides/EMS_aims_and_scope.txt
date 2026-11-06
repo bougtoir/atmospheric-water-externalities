@@ -1,0 +1,75 @@
+Skip to main content
+LeapSpace
+Journals & Books
+Help
+Search
+My account
+Sign in
+Environmental Modelling & Software
+Supports open access
+8.4
+CiteScore
+5.2
+Impact Factor
+Articles & Issues
+About
+Publish
+Order journal
+Submit your article
+Guide for authors
+Aims and scope
+
+Official Journal of the International Environmental Modelling & Software Society
+
+Environmental Modelling & Software publishes contributions, in the form of research articles, reviews, introductory overviews, and position papers on advances in the area of environmental modelling and software. Our aim is to improve our capacity to represent, understand, predict or manage the behaviour of natural environmental systems, including air, water, and land components, at all practical scales, and to communicate those improvements to a wide scientific and professional audience.
+
+It seeks presentation of:
+• Generic frameworks, techniques and issues which either integrate a range of disciplines and sectors or apply across a range
+• Model development, model evaluation, process identification and applications in diverse sectors of the environment (as outlined below) provided they reveal insights and contribute to the store of knowledge. Insights can relate to the generality and limitations of the modelling, methods, the model application and/or the systems modelled. Insights should be ones that are generalizable in some way and are likely to be of interest to those studying other systems and, preferably, other system types.
+• Development and application of environmental software, information and decision support systems
+• Real-world applications of software technologies - particularly state-of-the-art environmental software able to deal with complex requirements, conflicting user perspectives, and/or evolving data structures. Aspects related to software usability, reliability, verification and validation should be backed up with quantitative results as much as possible. Development and maintenance costs, and adoption and penetration of the software in the target user groups should be addressed. Licensing issues and open source access should be clearly specified.
+• Issues and methods related to the integrated modeling, assessment and management of environmental systems - including relevant policy and institutional analysis, public participation principles and methods, decision making methods, model integration, quality assurance and evaluation of models, data and procedures.
+
+Authors must specify clearly the objectives of their models and/or software, and report on the essential steps that were used in their development, normally including the rationale for the type of approach selected and substantial testing and evaluation of it - comparisons with alternative approaches and methods are encouraged. The purpose of this specification, evaluation and reporting is to convey the rigour and credibility of the work and therefore its potential to contribute to knowledge acquisition. To this latter end, authors are expected to briefly review and cite the historical progress made for their problem and clearly show how their work adds value to the literature.
+
+Authors are invited to submit relevant contributions in the following areas:
+• Generic and pervasive frameworks, techniques and issues - including system identification theory and practice, model conception, model integration, model and/or software evaluation, sensitivity and uncertainty assessment, visualization, scale and regionalization issues.
+• Integrated assessment and management of systems (river basins, regions etc.) for enhancing sustainability outcomes - including linked socioeconomic and biophysical models that may be developed with stakeholders for understanding systems, communication and learning, and improving system outcomes.
+• Artificial Intelligence (AI) techniques and systems, such as knowledge-based systems / expert systems, case-based reasoning systems, data mining, multi-agent systems, Bayesian networks, artificial neural networks, fuzzy logic, or knowledge elicitation and knowledge acquisition methods.
+• Decision support systems and environmental information systems- implementation and use of environmental data and models to support all phases and aspects of decision making, in particular supporting group and participatory decision making processes. Intelligent Environmental Decision Support Systems can include qualitative, quantitative, mathematical, statistical, AI models and meta-models.
+• Process-identification of environmental dynamics for instance of surface and subsurface hydrology, limnology, meteorology, geophysics with special respect to the interaction of anthroposphere and biosphere.
+• GIS, remote sensing and image processing
+
+These methodological developments should be illustrated with applications in the environmental fields, e.g.
+• Resource management including water, land, biological, transport systems
+• Pollution of different media such as air, water, soil, noise, radiation, as well as multimedia problems
+• Global pollution and global climate change
+• Regional studies of resource consumption and/or nature conservation in open landscapes as well as in urban regions
+
+Environmental Modelling & Software welcomes review articles on the topics above, especially ones that relate to generic modelling and/or software issues, or are cross-disciplinary in their problem treatment.
+Potential authors of review articles should contact the Editor-in-Chief to discuss the topic and coverage of their review. The journal has also published several Position Papers on key topics within its aims and scope at http://www.iemss.org/society/index.php/position-papers
+
+We encourage those interested in organizing a special issue or a virtual special issue within the scope of the journal to contact Prof. Min Chen or envsoft@elsevier.com for more information. Additionally, we encourage potential organizers to carefully review the relevant requirements in the Guide for Authors before proceeding. Please note that each special issue can only accept up to three guest editors (GEs).
+
+About ScienceDirect
+Remote access
+Contact and support
+Terms and conditions
+Privacy policy
+Cookie settings
+
+All content on this site: Copyright © 2026 Elsevier B.V., its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.
+
+We use cookies that are necessary to make our site work. We may also use additional cookies to analyze, improve, and personalize our content and your digital experience. You can manage your cookie preferences using theCookie settings link. For more information, see ourCookie Policy
+Cookie settings
+Accept all cookies
+×
+
+ScienceDirect recommends LeapSpace
+
+Imagine having a research assistant right now
+
+Ask questions in your own words to find answers from the broadest collection of trusted scientific content, with the help of responsible AI.
+
+Try LeapSpace now
+Learn more
