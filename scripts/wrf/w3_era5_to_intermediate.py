@@ -51,7 +51,6 @@ def main():
                 W(f, hdate, "UU", "m s-1", "U", p, s.u_component_of_wind.sel(level=lev).values)
                 W(f, hdate, "VV", "m s-1", "V", p, s.v_component_of_wind.sel(level=lev).values)
                 W(f, hdate, "RH", "%", "Relative humidity", p, rh)
-                W(f, hdate, "SPECHUMD", "kg kg-1", "Specific humidity", p, q)
                 W(f, hdate, "GHT", "m", "Geopotential height", p, s.geopotential.sel(level=lev).values / G)
             sfc = 200100.0
             t2, d2 = s["2m_temperature"].values, s["2m_dewpoint_temperature"].values
@@ -62,9 +61,9 @@ def main():
             W(f, hdate, "PSFC", "Pa", "Surface pressure", sfc, s.surface_pressure.values)
             W(f, hdate, "PMSL", "Pa", "Mean sea-level pressure", 201300.0, s.mean_sea_level_pressure.values)
             W(f, hdate, "SKINTEMP", "K", "Skin temperature", sfc, s.skin_temperature.values)
-            W(f, hdate, "SST", "K", "Sea surface temperature", sfc, s.sea_surface_temperature.values)
+            W(f, hdate, "SST", "K", "Sea surface temperature", sfc, np.where(np.isfinite(s.sea_surface_temperature.values), s.sea_surface_temperature.values, s.skin_temperature.values))
             W(f, hdate, "SEAICE", "fraction", "Sea ice", sfc, np.nan_to_num(s.sea_ice_cover.values))
-            W(f, hdate, "LANDSEA", "fraction", "Land-sea mask", sfc, s.land_sea_mask.values)
+            W(f, hdate, "LANDSEA", "fraction", "Land-sea mask", sfc, (s.land_sea_mask.values >= 0.5).astype("float32"))
             W(f, hdate, "SOILHGT", "m", "Terrain height", sfc, s.geopotential_at_surface.values / G)
             W(f, hdate, "SNOW", "kg m-2", "Snow water equivalent", sfc, 1000 * s.snow_depth.values)
             for i, nm in enumerate(["000007", "007028", "028100", "100289"], start=1):

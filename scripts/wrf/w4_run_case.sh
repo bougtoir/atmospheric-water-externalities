@@ -4,8 +4,10 @@
 set -euo pipefail
 CASE=$1; START=$2; END=$3; ERA5=$4; CTY=${5:-ALL}; DX=${6:-15000}; NX=${7:-141}; NY=${8:-111}; CU=${9:-1}
 EXPS=${EXPS:-"CONTROL WIND"}; NP=${NP:-2}
-ROOT=$(pwd); WRF=${WRF_DIR:-$HOME/wrf/WRFV4.6.1}; WPS=${WPS_DIR:-$HOME/wrf/WPS-4.6.0}
-GEOG=$ROOT/data/raw/wps_geog/WPS_GEOG_LOW_RES; PY=$ROOT/.venv/bin/python
+export HWLOC_COMPONENTS=-x86  # hwloc x86 CPUID backend raises SIGFPE in MPI_Init on this VM
+ROOT=$(pwd); GEOG_LINK=$HOME/wps_geog; [ -e $GEOG_LINK ] || ln -sfn $ROOT/data/raw/wps_geog/WPS_GEOG_LOW_RES $GEOG_LINK  # geogrid path strings are limited to 128 chars
+WRF=${WRF_DIR:-$HOME/wrf/WRFV4.6.1}; WPS=${WPS_DIR:-$HOME/wrf/WPS-4.6.0}
+GEOG=$GEOG_LINK/; PY=$ROOT/.venv/bin/python
 R=$ROOT/wrf_runs/$CASE; mkdir -p $R/wps $R/logs
 DT=$(( DX / 250 ))
 s=${START/T/_}:00:00; e=${END/T/_}:00:00
@@ -41,7 +43,7 @@ for X in $EXPS; do
     cp $R/domain_bounds.json $D/; (cd $ROOT && $PY scripts/wrf/w2_turbines.py $D ${START%T*} $C) > $R/logs/turbines_$X.log
   fi
   if [ ! -f wrfinput_d01 ]; then mpirun -np $NP ./real.exe > $R/logs/real_$X.log 2>&1; cp rsl.error.0000 $R/logs/real_$X.rsl; fi
-  if ! grep -q "SUCCESS COMPLETE WRF" rsl.error.0000 2>/dev/null || [ ! -f wrfout_d01_* ]; then
+  if ! grep -q "SUCCESS COMPLETE WRF" rsl.error.0000 2>/dev/null || ! ls wrfout_d01_* >/dev/null 2>&1; then
     t0=$(date +%s); mpirun -np $NP ./wrf.exe > $R/logs/wrf_$X.log 2>&1; t1=$(date +%s)
     cp rsl.error.0000 $R/logs/wrf_$X.rsl; echo "$X wallclock_s $((t1-t0))" >> $R/logs/timing.txt
   fi

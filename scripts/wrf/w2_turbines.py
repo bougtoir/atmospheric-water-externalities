@@ -4,9 +4,10 @@ Usage: python scripts/wrf/w2_turbines.py RUN_DIR DATE [COUNTRIES]  e.g. wrf_runs
 Intervention = offshore turbines in the register commissioned before DATE inside the WRF domain (optionally
 restricted to listed countries). Missing hub height / rotor diameter are filled from the median of
 offshore turbines with the same rated power class; turbines with missing commissioning date are excluded
-(as in the ERA5 source masks). Power/thrust curves are generic, momentum-theory consistent curves per class:
-P(U)=P_r (U^3-U_ci^3)/(U_r^3-U_ci^3) between cut-in 3.5 and rated 12 m/s, P_r to cut-out 25 m/s;
-C_P = P/(0.5 rho A U^3) (capped at 0.45), axial induction a from C_P = 4a(1-a)^2, C_T = 4a(1-a).
+(as in the ERA5 source masks). Power/thrust curves are idealised generic curves per class (no
+manufacturer curves are available in the register): P(U)=min(C_P2 * 0.5 rho A U^3, P_r) for cut-in 3.5 m/s
+to cut-out 25 m/s with C_P2=0.45; C_T=0.80 below rated and C_T=0.80*C_P/C_P2 above rated. Table power is
+written in kW and nominal power in MW, as read by WRF module_wind_fitch.
 """
 import json, os, sys
 import numpy as np, pandas as pd
@@ -24,7 +25,10 @@ for c in ("hub_height_m", "rotor_diameter_m"):
     med = o.groupby("cls")[c].transform("median")
     o[c] = o[c].fillna(med).fillna(o[c].median())
 classes = sorted(o.cls.unique())
-rho, uci, ur, uco = 1.225, 3.5, 12.0, 25.0
+# Idealised generic curve (no manufacturer data in the register): constant Cp = CP2 below rated power,
+# constant Ct = CT2 below rated; above rated, Ct scales with the power-limited Cp (Ct = CT2*Cp/CP2),
+# which is continuous at rated and close to NREL 5-MW reference thrust values. WRF expects power in kW and nominal power in MW.
+rho, uci, uco, CP2, CT2 = 1.225, 3.5, 25.0, 0.45, 0.80
 meta = []
 for k, c in enumerate(classes, start=1):
     s = o[o.cls == c]
@@ -32,14 +36,14 @@ for k, c in enumerate(classes, start=1):
     A = np.pi * d * d / 4
     rows = []
     for u in np.arange(uci, uco + 0.01, 0.5):
-        p = pr * 1e6 * (min(u, ur) ** 3 - uci ** 3) / (ur ** 3 - uci ** 3)
-        cp = min(p / (0.5 * rho * A * u ** 3), 0.45)
-        aa = np.linspace(0, 1 / 3, 20001); a = aa[np.argmin(abs(4 * aa * (1 - aa) ** 2 - cp))]
-        rows.append((u, 4 * a * (1 - a), p / 1e6))
+        p = min(CP2 * 0.5 * rho * A * u ** 3, pr * 1e6)
+        cp = p / (0.5 * rho * A * u ** 3)
+        ct = CT2 * cp / CP2
+        rows.append((u, ct, p / 1e3))
     with open(os.path.join(run, f"wind-turbine-{k}.tbl"), "w") as f:
         f.write(f"{len(rows)}\n{hh:.1f} {d:.1f} 0.130 {pr:.2f}\n")
         for u, ct, p in rows:
-            f.write(f"{u:.1f} {ct:.4f} {p:.4f}\n")
+            f.write(f"{u:.1f} {ct:.4f} {p:.1f}\n")
     meta.append(dict(type=k, rated_mw=pr, hub_m=hh, diameter_m=d, n=int(len(s))))
     o.loc[o.cls == c, "type"] = k
 with open(os.path.join(run, "windturbines.txt"), "w") as f:
