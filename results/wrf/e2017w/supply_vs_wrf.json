@@ -1,0 +1,11 @@
+{
+ "case": "e2017w",
+ "year": 2017,
+ "dE_farm_kg": 229492480.0,
+ "n_countries": 19,
+ "sum_abs_S_kg": 36111309.13924528,
+ "sum_abs_C_kg": 354440129584.0,
+ "n_same_sign": 9,
+ "n_C_exceeds_noise": null,
+ "noise_reference": null
+}

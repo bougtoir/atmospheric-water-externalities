@@ -20,6 +20,7 @@ B_j is taken as max |truth − supply| over the dynamic configurations in `resul
 
 Using the WRF [C] contrast as a model-conditional scale for R_j = C_j − S_j:
 
+- `e2017w`: countries with |S_j| > |C_j − S_j|: 0/19
 - `pilot_2020w1`: countries with |S_j| > |C_j − S_j|: 0/19
 
 Under the known-truth bound the sign is identified for receptor(s) ['C1'] only.
