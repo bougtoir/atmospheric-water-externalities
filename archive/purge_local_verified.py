@@ -4,8 +4,10 @@ For each object of the given datasets whose manifest status is 'ARCHIVED (remote
 re-hash the local project file against the manifest SHA-256, delete it, replace the archive working-tree copy
 with its LFS pointer and drop the cached LFS object. Every purge is appended to archive/PURGE_LEDGER.csv.
 Restore with: python archive/restore_project_data.py --dataset ID
-Usage: purge_local_verified.py DATASET [DATASET ...]"""
-import csv, datetime, hashlib, os, subprocess, sys
+Usage: purge_local_verified.py DATASET [DATASET ...]
+PURGE_ONLY=<regex> restricts the purge to objects whose file name matches (e.g. model output only, so that
+rerun inputs stay local)."""
+import csv, datetime, hashlib, os, re, subprocess, sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 A = os.path.expanduser(os.environ.get("TAWE_ARCHIVE_LOCAL", "~/archive/tawe-private-research-data"))
 def sha(p):
@@ -15,6 +17,8 @@ def sha(p):
     return h.hexdigest()
 ids = set(sys.argv[1:]); now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 rows = [r for r in csv.DictReader(open(os.path.join(A, "DATA_ARCHIVE_MANIFEST.csv"))) if r["dataset_id"] in ids]
+if os.environ.get("PURGE_ONLY"):
+    rows = [r for r in rows if re.search(os.environ["PURGE_ONLY"], os.path.basename(r["project_path"]))]
 bad = [r["object_id"] for r in rows if "read-back verified" not in r["archive_status"]]
 if bad: sys.exit(f"refusing: {len(bad)} objects not read-back verified, e.g. {bad[0]}")
 led = os.path.join(REPO, "archive", "PURGE_LEDGER.csv"); new = not os.path.exists(led); freed = 0
