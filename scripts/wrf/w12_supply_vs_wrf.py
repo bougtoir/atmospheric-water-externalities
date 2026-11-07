@@ -1,7 +1,8 @@
 """Gate 6: compare the [S] supply-channel estimate with the WRF [C] contrast for one case.
 
 [S]_c = dE_farm (WRF WIND-CONTROL evaporation change over farm cells, kg) x a_{ALL->c} (ERA5 tracking, JJA of the
-case year). [C]_c = WRF WIND-CONTROL precipitation change over country c. Noise_c = CTLPERT-CONTROL change.
+case year). [C]_c = WRF WIND-CONTROL precipitation change over country c. Internal variability: no-wind ensemble prediction interval from w10 (country_signal_noise.csv) when
+available, else the single CTLPERT-CONTROL change.
 a is a seasonal coefficient applied to a 5-day event, so [S] is an order-of-magnitude reference, not a forecast.
 Usage: python scripts/wrf/w12_supply_vs_wrf.py CASE YEAR [NOISE=CTLPERT_1]
 """
@@ -18,7 +19,15 @@ cp = pd.read_csv(f"{OUT}/country_precip.csv")
 w = cp[cp.exp == "WIND"].set_index("country")
 df = pd.DataFrame(dict(C_dP_kg=w.dP_kg))
 df["S_dP_kg"] = dE * a.reindex(df.index)
-if noise in set(cp.exp):
+import os
+csn = f"{OUT}/country_signal_noise.csv"
+if os.path.exists(csn) and "outside_internal_variability" in open(csn).readline():
+    e = pd.read_csv(csn, index_col=0)
+    df["pi_halfwidth_kg"] = e.pi_halfwidth_kg
+    df["C_exceeds_noise"] = e.outside_internal_variability
+    noise = "no-wind ensemble n=%d (95%% prediction interval)" % json.load(open(f"{OUT}/signal_noise.json"))["n_no_wind_ensemble"]
+    df["noise_dP_kg"] = e.pi_halfwidth_kg
+elif noise in set(cp.exp):
     df["noise_dP_kg"] = cp[cp.exp == noise].set_index("country").dP_kg
     df["C_exceeds_noise"] = df.C_dP_kg.abs() > df.noise_dP_kg.abs()
 df["S_over_C"] = df.S_dP_kg / df.C_dP_kg
