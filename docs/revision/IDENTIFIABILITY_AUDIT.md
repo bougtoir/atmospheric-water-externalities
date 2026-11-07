@@ -29,6 +29,7 @@ dynamic perturbation is zero (see `KNOWN_TRUTH_VALIDATION.md`).
 WRF [C] contrasts are model-conditional (fixed WRF v4.6.1 configuration, generic turbine curves) and are
 used only to judge whether the dynamic term is plausibly negligible, not as ground truth.
 
+- `e2016w`: 19 countries; median |S/C| = 0.00248, max |S/C| = 0.0802; same sign 8/19; no noise reference
 - `e2017w`: 19 countries; median |S/C| = 9.12e-05, max |S/C| = 0.00151; same sign 9/19; no noise reference
 - `pilot_2020w1`: 19 countries; median |S/C| = 0.00352, max |S/C| = 0.0177; same sign 7/19; |C| exceeds single-member noise in 11/19
 - `pilot_2020w1` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1'] by distance band:

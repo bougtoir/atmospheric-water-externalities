@@ -37,3 +37,7 @@ QC and paired contrasts: `results/wrf/e2017w/`, rendered in `docs/revision/wrf_c
 
 `w5_analyse_case.py` globbed `wrfout_d01_*`, which also matched `*.z.tmp` files being written by the compression
 watcher, and failed with an HDF error. File patterns now require the exact WRF timestamp form.
+
+## e2016w
+
+CONTROL and WIND completed (SUCCESS COMPLETE WRF); QC in `docs/revision/wrf_cases/e2016w_NUMERIC_QC.md`. Noise members CTLPERT_1-3 queued via `scripts/wrf/w6c_queue.sh` (author-approved 3-member ensemble per event).
