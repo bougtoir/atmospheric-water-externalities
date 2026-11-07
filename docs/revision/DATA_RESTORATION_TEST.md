@@ -33,3 +33,10 @@ Private archive commit `9fea214` (push exit 0). Fresh clone into an empty direct
 Datasets `wrf_pilot_2020w1_CTLPERT_1`, `wrf_pilot_2020w1_logs_v2`, `wrf_pilot_2020w1_analysis` were pushed
 (exit 0) and restored into an empty directory with `archive/restore_project_data.py --check-only`:
 50/50 objects verified by SHA-256. The read-back directory was removed after verification.
+
+## Read-back: WRF case e2016w, CONTROL/WIND + 3 CTLPERT members (private archive commits 1a180a3, 9b80fbc)
+
+Fresh pointer-only clone; `wrf_e2016w` (WPS) 103/103 via `restore_project_data.py --check-only`; then
+`archive/readback_lean.py` for `wrf_e2016w_CONTROL` 33/33, `_WIND` 41/41, `_CTLPERT_1` 34/34, `_CTLPERT_2` 34/34,
+`_CTLPERT_3` 34/34, `_logs` 30/30, `_analysis` 9/9: **318/318 objects verified by SHA-256**. Afterwards only the
+model-output files (wrfout/wrfsfc/wrfrst, 100 objects, 10.19 GB) were purged locally (`PURGE_ONLY`); rerun inputs remain.

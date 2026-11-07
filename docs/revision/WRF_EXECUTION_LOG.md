@@ -52,3 +52,18 @@ SHA-256 matched the manifest. Fix: only large model files (>= 50 MiB, outside `r
 374 existing small hard links were broken into independent copies. Local purges of read-back-verified datasets
 are now done only by `archive/purge_local_verified.py`, which re-hashes before deletion and logs to
 `archive/PURGE_LEDGER.csv` (first use: invalid pilot CTLPERT_1, 34 objects).
+
+### D4 — Disk exhaustion during the e2016w archive read-back (2026-11-07)
+
+`git add` in the private-archive clone stores a separate copy of every LFS object in `.git/lfs/objects`; with the
+archive working tree and the project tree this was a third local copy (≈15 GB for e2016w), and the full-checkout
+read-back (`restore_project_data.py --check-only`) needs a fourth. Free disk fell to 0 B while e2017w CTLPERT_1 was
+running. The WRF processes had been suspended (SIGSTOP) at 4.7 GB free and were resumed (SIGCONT) only after space
+was recovered, so no output was written while the disk was full; the run continued from the same model state.
+No project data was lost: the interrupted read-back clone was deleted, and only redundant copies were removed by
+`archive/dedupe_archive_tree.py` (pushed LFS cache copies, and archive working-tree copies of read-back-verified
+objects replaced by LFS pointers; every removal is in `archive/PURGE_LEDGER.csv`; project copies were re-hashed first).
+Read-back now uses `archive/readback_lean.py` (pointer-only fresh clone, per-dataset `git lfs fetch`, SHA-256 per
+object, fetched objects deleted before the next dataset). Logs and analysis files rewritten when a case gains members
+are archived as new versioned datasets (`ARCHIVE_VERSIONED`), so archived objects are never overwritten.
+`scripts/wrf/w14_archive_verify_purge.sh` chains archive → push → read-back → mark → output-only purge per case.
