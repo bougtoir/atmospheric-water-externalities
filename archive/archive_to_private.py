@@ -60,8 +60,12 @@ def main():
                 sys.exit(f"REFUSE overwrite with different content: {dst}")
         else:
             os.makedirs(os.path.dirname(dst), exist_ok=True)
+            # Hard-link only large model files (replaced atomically, never rewritten in place); copy small files,
+            # which analysis scripts may rewrite in place and would otherwise alter the archived copy.
             try:
-                os.link(p, dst)  # same filesystem: no duplicate bytes; in-place rewrites of p use new inodes
+                if os.path.getsize(p) < 50 * 2**20 or p.startswith("results"):
+                    raise OSError
+                os.link(p, dst)
             except OSError:
                 shutil.copy2(p, dst)
             if sha256(dst) != h:
