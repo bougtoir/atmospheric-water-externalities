@@ -11,3 +11,4 @@ data/raw/wps_geog/
 wrf_runs/
 .archive/
 results/wrf/*/maps.nc
+figures/wrf/
