@@ -67,3 +67,10 @@ Read-back now uses `archive/readback_lean.py` (pointer-only fresh clone, per-dat
 object, fetched objects deleted before the next dataset). Logs and analysis files rewritten when a case gains members
 are archived as new versioned datasets (`ARCHIVE_VERSIONED`), so archived objects are never overwritten.
 `scripts/wrf/w14_archive_verify_purge.sh` chains archive → push → read-back → mark → output-only purge per case.
+
+### Interruption — VM restart during pilot_2020w1 CTLPERT_3 (2026-11-07 ~22:45 UTC)
+
+All background processes stopped at simulated time 2020-07-01_18:30. Partial output of that run was discarded
+(never archived or analysed) and the run was restarted from the same perturbed `wrfinput_d01` (deterministic
+SHA-256 seed, `ic_perturbation.json` unchanged). The remaining queue continues as `scripts/wrf/w6d_queue.sh`;
+completed runs were unaffected (all had `SUCCESS COMPLETE WRF` and compression ledgers before the restart).
