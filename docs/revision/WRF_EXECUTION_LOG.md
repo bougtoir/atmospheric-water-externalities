@@ -41,3 +41,14 @@ watcher, and failed with an HDF error. File patterns now require the exact WRF t
 ## e2016w
 
 CONTROL and WIND completed (SUCCESS COMPLETE WRF); QC in `docs/revision/wrf_cases/e2016w_NUMERIC_QC.md`. Noise members CTLPERT_1-3 queued via `scripts/wrf/w6c_queue.sh` (author-approved 3-member ensemble per event).
+
+## Defect D3 — hard-linked archive staging of rewritable files (found and fixed 2026-11-07)
+
+`archive/archive_to_private.py` hard-linked every staged file into the private-archive working tree. Two small
+analysis files (`results/wrf/pilot_2020w1/signal_noise.json`, `country_signal_noise.csv`) were later rewritten in
+place, which also altered the archive working-tree copies. The committed and pushed archive versions were not
+affected (read-back 50/50 had already verified them); the working tree was restored with `git checkout` and its
+SHA-256 matched the manifest. Fix: only large model files (>= 50 MiB, outside `results/`) are hard-linked; all
+374 existing small hard links were broken into independent copies. Local purges of read-back-verified datasets
+are now done only by `archive/purge_local_verified.py`, which re-hashes before deletion and logs to
+`archive/PURGE_LEDGER.csv` (first use: invalid pilot CTLPERT_1, 34 objects).
