@@ -14,5 +14,11 @@ find $R/wps -maxdepth 1 -type f -print0 | reg INTERMEDIATE wrf_$CASE wps_output
 for X in $(ls -d $R/*/ | xargs -n1 basename | grep -v -e '^wps$' -e '^logs$'); do
   find $R/$X -maxdepth 1 -type f -print0 | reg SIMULATION wrf_${CASE}_$X wrf_run
 done
-find $R/logs $R/domain_bounds.json -type f -print0 | reg SIMULATION wrf_${CASE}_logs logs
-[ -n "${SKIP_ANALYSIS:-}" ] || find results/wrf/$CASE -type f -print0 | reg ANALYSIS wrf_${CASE}_analysis analysis
+# logs and analysis are rewritten when a case is extended (e.g. more ensemble members): archive each pass as a new
+# versioned dataset if a previous version exists, so no archived object is ever overwritten.
+V=""; grep -q "^wrf_${CASE}_logs:" ~/archive/tawe-private-research-data/DATA_ARCHIVE_MANIFEST.csv && V=_$(date -u +%Y%m%dT%H%M)
+VE=(env); [ -n "$V" ] && VE=(env ARCHIVE_VERSIONED=1)
+regv() { mapfile -d '' P; [ ${#P[@]} -gt 0 ] || return 0
+  "${VE[@]}" $PY archive/archive_to_private.py "$1" "$2" "${P[@]}" --meta "${M[@]}" "processing_status=$3"; }
+find $R/logs $R/domain_bounds.json -type f -print0 | regv SIMULATION wrf_${CASE}_logs$V logs
+[ -n "${SKIP_ANALYSIS:-}" ] || find results/wrf/$CASE -type f -print0 | regv ANALYSIS wrf_${CASE}_analysis$V analysis

@@ -52,10 +52,14 @@ def main():
         p = os.path.abspath(p)
         rel = os.path.relpath(p, REPO) if p.startswith(REPO) else os.path.relpath(p, os.path.expanduser("~"))
         dst_rel = os.path.join("objects", a.category, rel)
+        if os.environ.get("ARCHIVE_VERSIONED"):  # re-archived, rewritable outputs (logs, analysis): new dataset version
+            dst_rel = os.path.join("objects", a.category, "versions", a.dataset_id, rel)
         dst = os.path.join(ARCH, dst_rel)
         h = sha256(p)
         oid = f"{a.dataset_id}:{rel}"
-        if os.path.exists(dst):
+        if oid in rows and rows[oid]["sha256"] == h and rows[oid]["archive_path"] == dst_rel:
+            pass  # already registered with identical content (archive copy may be an LFS pointer after purge)
+        elif os.path.exists(dst):
             if sha256(dst) != h:
                 sys.exit(f"REFUSE overwrite with different content: {dst}")
         else:
