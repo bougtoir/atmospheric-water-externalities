@@ -1,7 +1,12 @@
 {
  "case": "pilot_2020w1",
- "noise_reference": "CTLPERT_1",
- "note": "single-member reference; descriptive ratios only",
+ "noise_members": [
+  "CTLPERT_1"
+ ],
+ "n_no_wind_ensemble": 2,
+ "note": "no-wind ensemble = CONTROL + CTLPERT members; descriptive, model-conditional",
+ "n_countries": 20,
+ "n_outside_internal_variability": 1,
  "bands_km": [
   0,
   30,

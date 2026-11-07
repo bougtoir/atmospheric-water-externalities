@@ -47,7 +47,7 @@ for c, x in sv.items():
              + (f"; |C| exceeds single-member noise in {int(x.C_exceeds_noise[m].sum())}/{m.sum()}"
                 if "C_exceeds_noise" in x and x.C_exceeds_noise.notna().any() else "; no noise reference"))
 for c, s in sn.items():
-    A.append(f"- `{c}` RMS(WIND−CONTROL)/RMS({s['noise_reference']}−CONTROL) by distance band:")
+    A.append(f"- `{c}` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members {s.get('noise_members', [s.get('noise_reference')])} by distance band:")
     for f in ("P_acc_mm", "E_acc_mm", "hub_wind", "IVTx", "PBLH"):
         if f in s["fields"]:
             A.append("  - " + f + ": " + ", ".join(f"{b} {g(v['ratio'] if isinstance(v, dict) else v)}"
