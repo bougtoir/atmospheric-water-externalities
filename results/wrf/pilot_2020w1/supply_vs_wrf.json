@@ -6,6 +6,6 @@
  "sum_abs_S_kg": 396836797.5315971,
  "sum_abs_C_kg": 206684600530.0,
  "n_same_sign": 7,
- "n_C_exceeds_noise": 12,
- "noise_reference": "CTLPERT_1"
+ "n_C_exceeds_noise": 2,
+ "noise_reference": "no-wind ensemble n=4 (95% prediction interval)"
 }
