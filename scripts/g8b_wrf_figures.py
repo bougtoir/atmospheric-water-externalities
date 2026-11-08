@@ -75,4 +75,8 @@ for i, c in enumerate(va):
 for a, t in zip(axs, ["relative bias vs ERA5", "spatial correlation vs ERA5"]):
     a.set_xticks(np.arange(len(vf)) + .4 - .4 / len(va)); a.set_xticklabels(vf, rotation=45, fontsize=6); a.set_title(t, fontsize=7); a.axhline(0, color="k", lw=.5)
 axs[0].legend(fontsize=5); save(fig, 5)
+import shutil
+for w, n in {1: 7, 5: 8, 3: 9, 2: 10, 4: 11}.items():  # manuscript numbering = order of first citation
+    for ext in ("png", "pdf"):
+        shutil.copyfile(F / f"Figure_W{w}.{ext}", pathlib.Path("figures") / f"Figure_{n}.{ext}")
 print("wrote", sorted(p.name for p in F.glob("*.png")), cases)

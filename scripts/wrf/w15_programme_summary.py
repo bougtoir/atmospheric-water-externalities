@@ -60,6 +60,19 @@ for c in CASES:
                         archive_readback_verified=bool(rb) and all("read-back verified" in r["archive_status"] for r in rb)))
 pd.DataFrame(reg).to_csv("docs/revision/WRF_EXPERIMENT_REGISTRY.csv", index=False)
 
+# public copy of the run configuration needed downstream (wrf_runs/ is not in the public repository)
+import re as _re
+for c in CASES:
+    tl, nl = f"wrf_runs/{c}/logs/turbines_WIND.log", glob.glob(f"wrf_runs/{c}/WIND/namelist.input")
+    if os.path.exists(tl) and nl and os.path.isdir(f"results/wrf/{c}"):
+        txt = open(tl).read()  # w4 keeps the first 600 characters of the generator log; header fields are complete
+        inv = {k: json.loads(_re.search(rf'"{k}": ([^,]+),', txt).group(1)) for k in ("date", "countries", "n_turbines", "capacity_mw")}
+        n = open(nl[0]).read()
+        keys = ["dx", "e_we", "e_sn", "e_vert", "time_step", "p_top_requested", "mp_physics", "ra_lw_physics", "ra_sw_physics",
+                "sf_sfclay_physics", "sf_surface_physics", "bl_pbl_physics", "cu_physics", "windfarm_opt", "windfarm_tke_factor"]
+        cfg = {k: float(_re.search(rf"\b{k}\s*=\s*([\d.]+)", n).group(1)) for k in keys}
+        json.dump(dict(case=c, namelist_WIND=cfg, turbines=inv), open(f"results/wrf/{c}/run_config.json", "w"), indent=1)
+
 BANDS = ["farm_0_30km", "near_30_150km", "far_gt150km"]
 FIELDS = ["hub_wind", "PBLH", "E_acc_mm", "P_acc_mm", "IVTx", "W", "T2"]
 cases, ctry = {}, []

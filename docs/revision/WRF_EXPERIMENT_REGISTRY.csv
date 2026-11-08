@@ -1,5 +1,7 @@
 case,experiment,regime,event_start,event_end,windfarm_opt,ic_perturbed,status,valid,wallclock_s,qc_pass,archive_objects,archive_readback_verified
 e2016sw,CONTROL,southwesterly,2016-08-04,2016-08-08,0,False,SUCCESS,True,11357,,0,False
+e2016sw,WIND,southwesterly,2016-08-04,2016-08-08,1,False,SUCCESS,True,12927,,0,False
+e2016sw,CTLPERT_1,southwesterly,2016-08-04,2016-08-08,0,True,SUCCESS,True,12829,,0,False
 e2016w,CONTROL,westerly,2016-07-08,2016-07-12,0,False,SUCCESS,True,10834,True,33,True
 e2016w,WIND,westerly,2016-07-08,2016-07-12,1,False,SUCCESS,True,9686,True,41,True
 e2016w,CTLPERT_1,westerly,2016-07-08,2016-07-12,0,True,SUCCESS,True,9702,True,34,True

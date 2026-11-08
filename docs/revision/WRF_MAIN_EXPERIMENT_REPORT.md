@@ -5,7 +5,7 @@ Every number is a model-conditional WIND − CONTROL contrast in one WRF v4.6.1 
 parameterisation, 15 km, ERA5 boundaries; evidence class [C]). It is not an observed real-world causal effect,
 and WRF output is not treated as ground truth.
 
-Experiments registered: 17 (16 valid, 1 invalid and retained for audit); events with a complete no-wind ensemble (CONTROL + CTLPERT_1..3): 3.
+Experiments registered: 19 (18 valid, 1 invalid and retained for audit); events with a complete no-wind ensemble (CONTROL + CTLPERT_1..3): 3.
 
 ## Internal-variability test per event
 

@@ -10,6 +10,8 @@ precipitation, no CFL messages. Per-case detail: `docs/revision/wrf_cases/*_NUME
 | case | experiment | status | QC | wall-clock (s) | archive objects | read-back verified |
 |---|---|---|---|---|---|---|
 | e2016sw | CONTROL | SUCCESS |  | 11357 | 0 | False |
+| e2016sw | WIND | SUCCESS |  | 12927 | 0 | False |
+| e2016sw | CTLPERT_1 | SUCCESS |  | 12829 | 0 | False |
 | e2016w | CONTROL | SUCCESS | True | 10834 | 33 | True |
 | e2016w | WIND | SUCCESS | True | 9686 | 41 | True |
 | e2016w | CTLPERT_1 | SUCCESS | True | 9702 | 34 | True |

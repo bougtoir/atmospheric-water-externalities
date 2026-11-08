@@ -11,23 +11,25 @@ res["software availability section"] = "Software and data availability" in paras
 res["CRediT + competing + GenAI sections"] = all(h in paras for h in ["CRediT authorship contribution statement", "Declaration of competing interest"]) and any(p.startswith("Declaration of generative AI") for p in paras)
 res["acknowledgements before references"] = paras.index("Acknowledgements") < paras.index("References")
 res["no inline images (figures separate)"] = len(d.inline_shapes) == 0
-figs = [int(m) for m in re.findall(r"Fig\. (\d)", "\n".join(paras[:paras.index("Figure captions")]))]
-first = list(dict.fromkeys(figs)); res["figures cited 1..6 in order"] = first == list(range(1, 7))
-res["figure files present"] = all(pathlib.Path(f"figures/Figure_{i}.png").exists() for i in range(1, 7))
+NFIG = sum(p.startswith("Fig. ") for p in paras[paras.index("Figure captions"):])
+figs = [int(m) for m in re.findall(r"Figs?\. (\d+)", "\n".join(paras[:paras.index("Figure captions")]))]
+first = list(dict.fromkeys(figs)); res[f"figures cited 1..{NFIG} in order"] = first == list(range(1, NFIG + 1))
+res["figure files present"] = all(pathlib.Path(f"figures/Figure_{i}.png").exists() for i in range(1, NFIG + 1))
 res["table cited"] = "Table 1" in full
 refs = pd.read_csv("references/references_verified.csv")
 ref_par = paras[paras.index("References") + 1:]
 res["all refs have DOI + crossref raw"] = all(f"https://doi.org/{x}" in "\n".join(ref_par) for x in refs.doi if x in "\n".join(ref_par)) and all(pathlib.Path(f"references/crossref_raw/{k}.json").exists() for k in refs.key)
 res["ref list alphabetical"] = [p.split(",")[0].lower() for p in ref_par] == sorted(p.split(",")[0].lower() for p in ref_par)
 res["no priority words"] = not re.search(r"\b(first|novel|unprecedented)\b", "\n".join(paras[:paras.index("Software and data availability")]), re.I)
-res["WRF NOT RUN disclosed"] = "NOT RUN" in full
+res["WRF contrasts labelled model-conditional"] = "model-conditional" in full and "NOT RUN" not in full
+res["single-author voice (no We/Our/Us)"] = not re.search(r"\b(we|our|us|ours)\b", "\n".join(paras[:paras.index("References")]), re.I)
 res["no causal claim words"] = not re.search(r"\b(causes|caused by wind farms|we estimate the externality)\b", full, re.I)
 res["no repo paths in prose"] = not re.search(r"(results/|scripts/|data/processed)", full)
 # numeric provenance: every number in body must appear in manuscript_values.json-derived renderings, a results CSV, or a whitelist of design constants
-design = {"0.25", "20", "35", "72", "1", "2", "3", "4", "5", "6", "0.5", "8", "18", "20%", "5%", "0.05", "0.8", "50", "10", "2.1", "2.2", "3.1", "3.2", "3.3", "3.4", "4.1", "4.2", "4.3", "4.4", "4.5", "64", "2026", "3.10", "15", "1:50"}
+design = {"0.25", "20", "35", "72", "1", "2", "3", "4", "5", "6", "0.5", "8", "18", "20%", "5%", "0.05", "0.8", "50", "10", "2.1", "2.2", "3.1", "3.2", "3.3", "3.4", "4.1", "4.2", "4.3", "4.4", "4.5", "64", "2026", "3.10", "15", "1:50", "3.5", "4.6", "4.7", "4.6.1", "0.01", "24", "30", "150", "95%", "4.0"}
 body = "\n".join(paras[paras.index("Abstract"):paras.index("Software and data availability")])
 body = re.sub(r"\((?:[^()]*?\d{4}[a-z]?;?\s*)+\)", " ", body)
-body = re.sub(r"Eq\. \(\d\)|\(\d\)|Fig\. \d|Table \d", " ", body)
+body = re.sub(r"Eq\. \(\d\)|\(\d\)|Figs?\. \d+(?:, \d+)*|Table \d|\d\.\d\. ", " ", body)
 vals = []
 for v in V.values():
     try: vals.append(float(v))
