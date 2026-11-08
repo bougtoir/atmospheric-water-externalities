@@ -41,6 +41,7 @@ fig.colorbar(im, ax=axs, shrink=.7, label="Δ accumulated precipitation (mm, pos
 
 # W3: RMS(WIND-CONTROL)/RMS(noise-CONTROL) by distance band
 sn = {c: json.load(open(f"results/wrf/{c}/signal_noise.json")) for c in cases if os.path.exists(f"results/wrf/{c}/signal_noise.json")}
+LBL = {"hub_wind": "hub-height wind", "PBLH": "boundary-layer height", "IVTx": "eastward vapour flux", "E_acc_mm": "evaporation", "P_acc_mm": "precipitation"}
 fl = ["hub_wind", "PBLH", "IVTx", "E_acc_mm", "P_acc_mm"]; bands = ["farm_0_30km", "near_30_150km", "far_gt150km"]
 fig, axs = plt.subplots(1, len(fl), figsize=(8.0, 2.6), sharey=True)
 for a, f in zip(axs, fl):
@@ -48,18 +49,20 @@ for a, f in zip(axs, fl):
         if c in sn and f in sn[c]["fields"]:
             a.plot(range(3), [sn[c]["fields"][f][b]["ratio"] for b in bands], "o-", color=col, label=c, ms=3)
     a.axhline(1, color="k", lw=.6, ls=":"); a.set_xticks(range(3)); a.set_xticklabels(["0–30", "30–150", ">150"], fontsize=6, rotation=30)
-    a.set_title(f, fontsize=7); a.set_yscale("log"); a.set_xlabel("km from farm")
+    a.set_title(LBL.get(f, f), fontsize=7); a.set_yscale("log"); a.set_xlabel("km from farm")
 axs[0].set_ylabel("RMS signal / RMS noise"); axs[-1].legend(fontsize=5); save(fig, 3)
 
 # W4: country precipitation contrast vs no-wind ensemble prediction interval
-fig, axs = plt.subplots(len(cases), 1, figsize=(7.2, 1.8 * len(cases)), squeeze=False)
+fig, axs = plt.subplots(len(cases), 1, figsize=(7.2, 2.1 * len(cases)), squeeze=False, gridspec_kw=dict(hspace=0.75))
 for a, c in zip(axs[:, 0], cases):
     p = f"results/wrf/{c}/country_signal_noise.csv"
     if not os.path.exists(p) or "pi_halfwidth_kg" not in open(p).readline(): a.set_title(f"{c}: no-wind ensemble not yet available", fontsize=7); a.axis("off"); continue
     d = pd.read_csv(p).sort_values("country"); x = np.arange(len(d))
     a.errorbar(x, d.ens_mean_minus_control_kg / 1e9, yerr=d.pi_halfwidth_kg / 1e9, fmt="none", ecolor="0.6", capsize=1.5,
                label="no-wind ensemble 95% prediction interval")
-    a.scatter(x, d.dP_wind_kg / 1e9, s=8, c=np.where(d.outside_internal_variability, "r", "k"), zorder=3, label="WIND − CONTROL")
+    o = d.outside_internal_variability.values
+    a.scatter(x[~o], d.dP_wind_kg[~o] / 1e9, s=8, c="k", zorder=3, label="WIND − CONTROL (inside interval)")
+    a.scatter(x[o], d.dP_wind_kg[o] / 1e9, s=10, c="r", zorder=3, label="WIND − CONTROL (outside interval)")
     a.axhline(0, color="k", lw=.5); a.set_xticks(x); a.set_xticklabels(d.country, fontsize=6); a.set_ylabel("ΔP (Mt)")
     a.set_title(f"{c} (n = {json.load(open(f'results/wrf/{c}/signal_noise.json'))['n_no_wind_ensemble']} no-wind runs)", fontsize=7)
 axs[0, 0].legend(fontsize=6); save(fig, 4)
