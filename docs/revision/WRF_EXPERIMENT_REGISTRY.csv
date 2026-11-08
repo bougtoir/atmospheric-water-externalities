@@ -1,0 +1,18 @@
+case,experiment,regime,event_start,event_end,windfarm_opt,ic_perturbed,status,valid,wallclock_s,qc_pass,archive_objects,archive_readback_verified
+e2016sw,CONTROL,southwesterly,2016-08-04,2016-08-08,0,False,SUCCESS,True,11357,,0,False
+e2016w,CONTROL,westerly,2016-07-08,2016-07-12,0,False,SUCCESS,True,10834,True,33,True
+e2016w,WIND,westerly,2016-07-08,2016-07-12,1,False,SUCCESS,True,9686,True,41,True
+e2016w,CTLPERT_1,westerly,2016-07-08,2016-07-12,0,True,SUCCESS,True,9702,True,34,True
+e2016w,CTLPERT_2,westerly,2016-07-08,2016-07-12,0,True,SUCCESS,True,9767,True,34,True
+e2016w,CTLPERT_3,westerly,2016-07-08,2016-07-12,0,True,SUCCESS,True,9690,True,34,True
+e2017w,CONTROL,westerly,2017-06-22,2017-06-26,0,False,SUCCESS,True,11470,True,33,True
+e2017w,WIND,westerly,2017-06-22,2017-06-26,1,False,SUCCESS,True,10977,True,42,True
+e2017w,CTLPERT_1,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,10223,True,34,True
+e2017w,CTLPERT_2,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,9629,True,34,True
+e2017w,CTLPERT_3,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,9668,True,34,True
+pilot_2020w1,CONTROL,westerly,2020-07-01,2020-07-05,0,False,SUCCESS,True,11891,True,33,True
+pilot_2020w1,WIND,westerly,2020-07-01,2020-07-05,1,False,SUCCESS,True,11133,True,43,True
+pilot_2020w1,CTLPERT_1_INVALID_unperturbed_THM,westerly,2020-07-01,2020-07-05,0,True,"SUCCESS (INVALID: THM not perturbed, output bit-identical to CONTROL; rerun)",False,,,34,True
+pilot_2020w1,CTLPERT_1,westerly,2020-07-01,2020-07-05,0,True,SUCCESS,True,11829,True,34,True
+pilot_2020w1,CTLPERT_2,westerly,2020-07-01,2020-07-05,0,True,SUCCESS,True,10073,True,34,True
+pilot_2020w1,CTLPERT_3,westerly,2020-07-01,2020-07-05,0,True,SUCCESS,True,12443,True,34,True
