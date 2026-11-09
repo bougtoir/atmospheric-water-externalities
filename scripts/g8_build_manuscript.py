@@ -16,6 +16,7 @@ def f2(x): return f"{x:.2f}"
 def pct(x, d=1): return f"{100 * x:.{d}f}%"
 # ---- computed values
 V = {}
+fmt_m = lambda x, d=2: f"{x:.{d}f}".replace("-", "−")
 V["y0"], V["y1"], V["ny"] = years[0], years[-1], len(years)
 V["cap0"] = mlog[str(years[0])]["capacity_mw"] / 1000; V["cap1"] = mlog[str(years[-1])]["capacity_mw"] / 1000
 V["cells0"] = mlog[str(years[0])]["n_cells"]; V["cells1"] = mlog[str(years[-1])]["n_cells"]
@@ -145,7 +146,7 @@ Pp("These literatures meet at a question that neither answers on its own: if a w
 Pp("This paper contributes (i) a formal definition of TAWE as a counterfactual difference with an explicit channel "
    "decomposition and evidence classes; (ii) an open, conservation-closed forward-tagging tool driven by reanalysis "
    "column budgets, with verification tests; (iii) known-truth experiments that quantify when the computable supply "
-   "channel recovers the externality; and (iv) a European offshore-wind test case with placebo sources and a "
+   "channel recovers the externality; (iv) a European offshore-wind test case with placebo sources and a "
    "detectability analysis; and (v) paired regional simulations with and without a wind-farm parameterisation, with "
    "initial-condition ensembles that measure internal variability, which give model-conditional intervention contrasts "
    "for the dynamic channel. What cannot be identified is reported alongside what can.")
@@ -210,7 +211,7 @@ Pp(f"WRF v4.6.1 was run on a single Lambert domain of {V['w_nx']} × {V['w_ny']}
    f"factor {V['w_tke']}. CONTROL and WIND differ only in this switch. Internal variability is sampled by three "
    f"additional no-wind runs whose initial potential temperature in the lowest ten levels is perturbed by Gaussian noise "
    f"(σ = 0.01 K, fixed seeds). A WIND − CONTROL difference is called distinguishable when it lies outside the 95% "
-   f"prediction interval of the {V['w_nens']}-member no-wind ensemble; with about 20 receptor countries, one flag per "
+   f"prediction interval of the {V['w_nens']}-member no-wind ensemble (ensemble mean ± t₀.₉₇₅,ₙ₋₁·s·√(1 + 1/n), n = {V['w_nens']}); with about 20 receptor countries, one flag per "
    f"event is expected by chance.")
 
 H("4. Results")
@@ -222,7 +223,7 @@ H("4.2. Known-truth recovery", 2)
 Pp(f"Without dynamic perturbation the supply estimator reproduced the true externality to a relative error of "
    f"{V['kt_lin_err']:.1e} (Fig. 3). With a dynamic channel the median absolute relative error was "
    f"{pct(V['kt_dyn_med'],0)} (maximum {pct(V['kt_dyn_max'],0)}); the sign was wrong in {V['kt_flip']} of "
-   f"{V['kt_n_dyn']} cases, {V['kt_flip_c2']} of them at the far receptor, because a downwind change in transport speed or "
+   f"{V['kt_n_dyn']} cases ({V['kt_flip_c2']} of {V['kt_n_c2']} at the far receptor), because a downwind change in transport speed or "
    f"rain efficiency redistributes background moisture that the tag does not see. Treating accounting A(S→c) as the "
    f"externality was wrong by at least a factor of {1 + V['kt_acc_min']:.1f}.")
 H("4.3. European accounting [A]", 2)
@@ -250,8 +251,8 @@ Pp(f"All {V['w_runs']} simulations (domain and turbines in Fig. 7) completed wit
    f"water vapour; one initial-condition run that had not been perturbed was detected, retained for audit and repeated. "
    f"Against ERA5, CONTROL precipitation had a relative bias of {pct(V['w_vbP_min'],0)} to {pct(V['w_vbP_max'],0)} and a "
    f"spatial correlation of {V['w_vrP_min']:.2f}–{V['w_vrP_max']:.2f}; column water vapour correlated at "
-   f"≥{V['w_vrW_min']:.2f} (Fig. 8). In farm cells, WIND − CONTROL hub-height wind changed by {V['w_hub_min']:.2f} to "
-   f"{V['w_hub_max']:.2f} m s⁻¹ and boundary-layer height by {V['w_pblh_min']:+.0f} to {V['w_pblh_max']:+.0f} m, at a "
+   f"≥{V['w_vrW_min']:.2f} (Fig. 8). In farm cells, WIND − CONTROL hub-height wind changed by {fmt_m(V['w_hub_min'])} to "
+   f"{fmt_m(V['w_hub_max'])} m s⁻¹ and boundary-layer height by {V['w_pblh_min']:+.0f} to {V['w_pblh_max']:+.0f} m, at a "
    f"simulated fleet output of {V['w_pow_min']:.1f}–{V['w_pow_max']:.1f} GW. Within 30 km of farms the RMS "
    f"hub-wind contrast was {V['w_sn_hub_near_min']:.1f}–{V['w_sn_hub_near_max']:.1f} times the RMS spread of the no-wind "
    f"members, and the boundary-layer-height contrast {V['w_sn_pblh_near_min']:.1f}–{V['w_sn_pblh_near_max']:.1f} times "
@@ -260,7 +261,7 @@ H("4.7. Cross-border precipitation contrasts [C]", 2)
 Pp(f"Beyond 150 km from farms the precipitation contrast was {V['w_sn_p_far_min']:.2f}–{V['w_sn_p_far_max']:.2f} "
    f"times the internal spread (Fig. 9; maps in Fig. 10), and the inner-domain precipitation total changed by {pct(V['w_dP_tot_min'],2)} "
    f"to {pct(V['w_dP_tot_max'],2)}. Of {V['w_N']} country–event contrasts, {V['w_K']} lay outside the no-wind prediction "
-   f"interval against {V['w_expK']:.0f} expected by chance (binomial reference {V['w_pbin']:.2f}; tests are not "
+   f"interval against {V['w_expK']:.0f} expected by chance (binomial probability of at least {V['w_K']} flags {V['w_pbin']:.2f}; tests are not "
    f"independent), and {V['w_rep2']} of {V['w_ncty']} countries were flagged in more than one event (Fig. 11). The "
    f"supply-channel scenario, the precipitation that farm-cell evaporation changes in WRF would deliver with unchanged "
    f"dynamics, was a median {V['w_S_noise_med']:.1e} (maximum {V['w_S_noise_max']:.1e}) of the internal-variability "
@@ -282,7 +283,7 @@ Pp("The framework separates three statements that are often merged. Accounting (
    "that this study does not estimate, and the known-truth experiments show it is reliable only when the intervention "
    "leaves transport and rain efficiency untouched. The externality itself requires the dynamic channel, through which "
    "wind-farm modelling studies obtain their precipitation responses (flow deceleration, convergence and boundary-layer change) "
-   f"{c('fitch2012','fischereit2022','akhtar2026')}; without executed counterfactual simulations it is not identified.")
+   f"{c('fitch2012','fischereit2022','akhtar2026')}; it is identified only through executed counterfactual simulations, and then only conditionally on the model.")
 Pp("Two further limits follow. Reanalysis cannot carry the intervention, because the forecast model used to produce "
    "ERA5 has no wind-farm parameterisation; before/after comparisons in reanalysis are therefore not evidence of "
    "infrastructure effects. Observational detection of the supply channel is infeasible at the scale of national "
@@ -314,7 +315,7 @@ Pp("Name: atmospheric-water-externalities (TAWE tagging and identifiability tool
    "Software: Python 3.10 with numpy, xarray, pandas, scipy, shapely, pyshp, matplotlib, python-docx (pinned in "
    "requirements.lock.txt). Language: Python. Availability and cost: free, https://github.com/bougtoir/"
    "atmospheric-water-externalities (licence: MIT). Data: ERA5 (Copernicus licence) re-fetched by script with SHA-256 "
-   "ledger; Natural Earth (public domain); offshore turbine register copied with checksum from a public repository.")
+   "ledger; Natural Earth (public domain); offshore turbine register copied with checksum from a public repository. Regional simulations used WRF v4.6.1 and WPS v4.6.0 (public domain); namelists, turbine tables and per-event analysis results are in the repository, and WRF input and output files are held in a private archive with a SHA-256 manifest and are available from the author on request.")
 H("CRediT authorship contribution statement")
 Pp("Onishi Tatsuki: Conceptualization, Methodology, Software, Formal analysis, Investigation, Data curation, Visualization, Writing – original draft, Writing – review & editing.")
 H("Declaration of competing interest")
