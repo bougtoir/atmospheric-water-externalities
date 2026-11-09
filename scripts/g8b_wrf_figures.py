@@ -20,10 +20,15 @@ ax.contourf(lon, lat, (m0.country.values != "").astype(float) if m0.country.dtyp
             levels=[-.5, .5, 1.5], colors=["#dfefff", "#e8e8e8"])
 ax.contour(lon, lat, m0.inner.values.astype(float), levels=[.5], colors="k", linewidths=.8, linestyles="--")
 ax.plot(np.r_[lon[0], lon[:, -1], lon[-1, ::-1], lon[::-1, 0]], np.r_[lat[0], lat[:, -1], lat[-1, ::-1], lat[::-1, 0]], "k-", lw=1)
-tl = {c: np.loadtxt(f"wrf_runs/{c}/WIND/windturbines.txt") for c in cases if os.path.exists(f"wrf_runs/{c}/WIND/windturbines.txt")}
+tl = {c: np.loadtxt(f"results/wrf/{c}/windturbines.txt") for c in cases}
 col = dict(zip(cases, plt.cm.tab10.colors))
+same = {c: [o for o in tl if o != c and tl[o].shape == tl[c].shape and np.array_equal(tl[o], tl[c])] for c in tl}
+done = set()
 for c in sorted(tl, key=lambda c: -len(tl[c])):  # largest fleet first so smaller fleets stay visible
-    ax.scatter(tl[c][:, 1], tl[c][:, 0], s=.6, color=col[c], label=f"{c}: {len(tl[c])} turbines")
+    if c in done:
+        continue
+    grp = sorted([c] + same[c]); done.update(grp)
+    ax.scatter(tl[c][:, 1], tl[c][:, 0], s=.6, color=col[c], label=f"{' = '.join(grp)}: {len(tl[c])} turbines")
 ax.set_xlabel("Longitude (°E)"); ax.set_ylabel("Latitude (°N)"); ax.legend(markerscale=12, fontsize=6, loc="upper left")
 ax.set_title("WRF domain (15 km), inner analysis region (dashed) and Fitch turbines"); save(fig, 1)
 
@@ -70,13 +75,15 @@ axs[0, 0].legend(fontsize=6); save(fig, 4)
 # W5: CONTROL vs ERA5 (driving reanalysis) relative bias and spatial correlation
 va = {c: json.load(open(f"results/wrf/{c}/validation.json")) for c in cases if os.path.exists(f"results/wrf/{c}/validation.json")}
 vf = sorted({f for v in va.values() for f in v["fields"]})
+RELB = {"P_acc_mm", "E_acc_mm", "W", "IVTx"}  # relative bias undefined for IVTy (domain mean near zero, sign-changing)
+VL = {"P_acc_mm": "precipitation", "E_acc_mm": "evaporation", "W": "column water", "IVTx": "eastward IVT", "IVTy": "northward IVT"}
 fig, axs = plt.subplots(1, 2, figsize=(7.2, 2.6))
 for i, c in enumerate(va):
     w = .8 / len(va)
-    axs[0].bar(np.arange(len(vf)) + i * w, [va[c]["fields"].get(f, {}).get("rel_bias", np.nan) for f in vf], w, label=c)
+    axs[0].bar(np.arange(len(vf)) + i * w, [va[c]["fields"].get(f, {}).get("rel_bias", np.nan) if f in RELB else np.nan for f in vf], w, label=c)
     axs[1].bar(np.arange(len(vf)) + i * w, [va[c]["fields"].get(f, {}).get("spatial_r", np.nan) for f in vf], w)
-for a, t in zip(axs, ["relative bias vs ERA5", "spatial correlation vs ERA5"]):
-    a.set_xticks(np.arange(len(vf)) + .4 - .4 / len(va)); a.set_xticklabels(vf, rotation=45, fontsize=6); a.set_title(t, fontsize=7); a.axhline(0, color="k", lw=.5)
+for a, t in zip(axs, ["relative bias vs ERA5 (not defined for northward IVT)", "spatial correlation vs ERA5"]):
+    a.set_xticks(np.arange(len(vf)) + .4 - .4 / len(va)); a.set_xticklabels([VL.get(f, f) for f in vf], rotation=45, fontsize=6); a.set_title(t, fontsize=7); a.axhline(0, color="k", lw=.5)
 axs[0].legend(fontsize=5); save(fig, 5)
 import shutil
 for w, n in {1: 7, 5: 8, 3: 9, 2: 10, 4: 11}.items():  # manuscript numbering = order of first citation
