@@ -75,6 +75,8 @@ results,2.0e-04,closure;kt_lin_err;land_mean;tb_own_min;A_over_P_max,9,canonical
 results,2.2e-02,closure;kt_lin_err;tb_own_min;A_over_P_max;num_cfl,9,canonical
 discussion,5.,kt_dyn_max;num_3h;w_events;w_expK,4,canonical
 conclusions,6.,ny,1,canonical
+conclusions,24,pl_n;pl_inside;dt_ncty;w_tke;w_runs,7,canonical
+conclusions,24,pl_n;pl_inside;dt_ncty;w_tke;w_runs,7,canonical
 captions,20%,land_mean,1,canonical
 captions,15,tb_foreign_min;w_dx_km;w_pow_max;w_vbP_min,4,canonical
 captions,95%,w_invalid;w_sn_p_far_min;w_vrW_min,3,canonical
@@ -100,7 +102,10 @@ highlights,20%,land_mean,1,canonical
 highlights,24,pl_n;pl_inside;dt_ncty;w_tke;w_runs,7,canonical
 highlights,24,pl_n;pl_inside;dt_ncty;w_tke;w_runs,7,canonical
 cover_letter,5,kt_dyn_max;num_3h;w_events;w_expK,4,canonical
-cover_letter,"2,228",kt_acc_min,1,canonical
+cover_letter,7,w_pow_min;w_K,2,canonical
+cover_letter,100,w_invalid;w_sn_p_far_min;w_N;w_vrW_min,4,canonical
+cover_letter,95%,w_invalid;w_sn_p_far_min;w_vrW_min,3,canonical
+cover_letter,"2,230",kt_acc_min,1,canonical
 cover_letter,119,,0,design-constant-or-unmatched
 cover_letter,11,sea_mean;w_cap_min,2,canonical
 cover_letter,1,w_invalid;w_sn_p_far_min;w_vrW_min,3,canonical

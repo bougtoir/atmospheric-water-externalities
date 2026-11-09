@@ -7,5 +7,10 @@ Status: **PASS**. Each test edits one canonical result file, rebuilds the manusc
 | test | location | before_present | after_old_absent | after_new_present |
 |---|---|---|---|---|
 | WRF pooled flags +2 | results | True | True | True |
+| WRF pooled flags +2 | cover_letter | True | True | True |
+| placebo inside −1 | abstract | True | True | True |
 | placebo inside −1 | highlights | True | True | True |
 | placebo inside −1 | results | True | True | True |
+| placebo inside −1 | conclusions | True | True | True |
+| known-truth far-receptor reversal +1 | abstract | True | True | True |
+| Table 1 own-land share x2 (BE) | tables | True | True | True |
