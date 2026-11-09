@@ -302,7 +302,7 @@ Pp("The paired simulations add a third statement. The parameterised fleet decele
    "their labels.")
 H("6. Conclusions")
 Pp(f"Source–receptor accounting of offshore wind-farm evaporation in Europe is transboundary, but it is not an "
-   f"externality estimate: placebo sources reproduce most coefficients, the computable supply channel fails in "
+   f"externality estimate: placebo sources reproduce {V['pl_inside']} of {V['pl_n']} coefficients, the computable supply channel fails in "
    f"known-truth worlds when dynamics change, and the signal is undetectable observationally. In paired WRF "
    f"simulations the fleet changes near-farm winds and boundary layers clearly, while cross-border precipitation "
    f"contrasts remain within internal variability for the simulated events. The released tools make these "
