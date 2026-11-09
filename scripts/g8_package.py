@@ -4,14 +4,14 @@ matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from docx import Document
 V = json.load(open("results/manuscript_values.json")); W = json.load(open("results/manuscript_wordcount.json"))
 S = pathlib.Path("submission")
-fig, ax = plt.subplots(figsize=(8, 3)); ax.axis("off")
+fig, ax = plt.subplots(figsize=(9, 3)); ax.axis("off")
 items = [("Accounting [A]", f"{100*V['land_mean']:.0f}% of farm-cell\nevaporation rains on land,\nmostly abroad"),
          ("Placebo test", f"{V['pl_inside']}/{V['pl_n']} receptors inside\nplacebo range"),
          ("Known truth", f"supply estimator: median\nerror {100*V['kt_dyn_med']:.0f}% with dynamics"),
-         ("WRF contrast [C]", f"{V['w_K']}/{V['w_N']} country contrasts\noutside internal\nvariability (model-conditional)")]
+         ("WRF contrast [C]", f"{V['w_K']}/{V['w_N']} country contrasts\noutside internal\nvariability\n(model-conditional)")]
 for i, (h, t) in enumerate(items):
     x = 0.02 + i * 0.245; ax.add_patch(plt.Rectangle((x, 0.15), 0.22, 0.7, fill=False, lw=1.2))
-    ax.text(x + 0.11, 0.72, h, ha="center", weight="bold", fontsize=10); ax.text(x + 0.11, 0.42, t, ha="center", va="center", fontsize=8.5)
+    ax.text(x + 0.11, 0.72, h, ha="center", weight="bold", fontsize=10); ax.text(x + 0.11, 0.42, t, ha="center", va="center", fontsize=7.5)
 ax.text(0.5, 0.03, "Accounting is not attribution", ha="center", fontsize=11, style="italic")
 fig.savefig(S / "graphical_abstract.pdf", bbox_inches="tight"); fig.savefig(S / "graphical_abstract.png", dpi=300, bbox_inches="tight"); plt.close(fig)
 cl = f"""Dear Editor,

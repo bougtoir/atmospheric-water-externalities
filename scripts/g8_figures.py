@@ -16,13 +16,13 @@ def save(fig, n):
 # Figure 1: framework schematic (accounting vs supply scenario vs dynamic counterfactual)
 fig, ax = plt.subplots(figsize=(7.2, 2.6)); ax.axis("off")
 boxes = [(0.02, "ERA5 column budget\nW, F, E, P (hourly)"), (0.27, "Forward tagging\nfrom farm cells S\n[A] accounting a(S→c)"),
-         (0.52, "Supply channel\nΔE_S · a(S→c)\n[S] scenario"), (0.77, "Dynamic channel\ncoupled counterfactual\n(WRF wind-farm scheme)\nNOT RUN")]
+         (0.52, "Supply channel\nΔE_S · a(S→c)\n[S] scenario"), (0.77, "Dynamic channel\nWRF WIND − CONTROL\n+ no-wind ensemble\n[C] model-conditional")]
 for x, t in boxes:
-    ax.add_patch(plt.Rectangle((x, 0.3), 0.21, 0.45, fill=False, lw=1)); ax.text(x + 0.105, 0.525, t, ha="center", va="center")
+    ax.add_patch(plt.Rectangle((x, 0.3), 0.21, 0.45, fill=False, lw=1)); ax.text(x + 0.105, 0.525, t, ha="center", va="center", fontsize=6.8)
 for x in (0.23, 0.48, 0.73):
     ax.annotate("", (x + 0.04, 0.525), (x, 0.525), arrowprops=dict(arrowstyle="->"))
 ax.text(0.5, 0.12, "TAWE(j→c) = Δ_supply + Δ_dynamic ;  validation: closure, analytic rain-out, placebo sources, known-truth worlds",
-        ha="center"); save(fig, 1)
+        ha="center", fontsize=7.5); save(fig, 1)
 
 # Figure 2: domain, farm cells (latest year) by owner, placebo cells
 yr = years[-1]; owner = M[f"owner_{yr}"]
