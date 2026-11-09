@@ -5,7 +5,7 @@ Every number is a model-conditional WIND − CONTROL contrast in one WRF v4.6.1 
 parameterisation, 15 km, ERA5 boundaries; evidence class [C]). It is not an observed real-world causal effect,
 and WRF output is not treated as ground truth.
 
-Experiments registered: 21 (20 valid, 1 invalid and retained for audit); events with a complete no-wind ensemble (CONTROL + CTLPERT_1..3): 4.
+Experiments registered: 26 (25 valid, 1 invalid and retained for audit); events with a complete no-wind ensemble (CONTROL + CTLPERT_1..3): 5.
 
 ## Internal-variability test per event
 
@@ -17,9 +17,10 @@ of the no-wind ensemble (n = 4). Under no effect about 5 % of countries are expe
 | e2016sw | southwesterly | 20 | 1 | 1 | 0.642 | -0.254 | 7.335 |
 | e2016w | westerly | 20 | 0 | 1 | 1 | 0.00517 | 7.252 |
 | e2017w | westerly | 20 | 3 | 1 | 0.0755 | 0.274 | 8.681 |
+| e2021nw | northwesterly | 20 | 1 | 1 | 0.642 | 0.251 | 15.08 |
 | pilot_2020w1 | westerly | 20 | 2 | 1 | 0.264 | -0.0988 | 13.78 |
 
-Pooled: 6/80 country-event tests outside (expected 4; binomial P(X ≥ 6) = 0.211). Tests are not independent (countries share weather); the binomial reference is a calibration aid only.
+Pooled: 7/100 country-event tests outside (expected 5; binomial P(X ≥ 7) = 0.234). Tests are not independent (countries share weather); the binomial reference is a calibration aid only.
 
 ## Signal-to-noise ratio by distance from the nearest farm cell
 
@@ -48,6 +49,13 @@ RMS(WIND − CONTROL) / RMS(CTLPERT − CONTROL) over cells in each band; ≈1 m
 | e2017w | IVTx | 2.32 | 1.35 | 1.07 |
 | e2017w | W | 1.26 | 1.14 | 1.01 |
 | e2017w | T2 | 1.53 | 1.12 | 1.04 |
+| e2021nw | hub_wind | 6.56 | 1.15 | 0.923 |
+| e2021nw | PBLH | 2.41 | 1.01 | 0.98 |
+| e2021nw | E_acc_mm | 2.46 | 0.968 | 0.993 |
+| e2021nw | P_acc_mm | 1 | 1.01 | 0.964 |
+| e2021nw | IVTx | 1.6 | 1.09 | 0.984 |
+| e2021nw | W | 1.27 | 1.25 | 1.01 |
+| e2021nw | T2 | 1.16 | 0.984 | 0.973 |
 | pilot_2020w1 | hub_wind | 6.74 | 1.37 | 1.03 |
 | pilot_2020w1 | PBLH | 1.96 | 1.11 | 0.988 |
 | pilot_2020w1 | E_acc_mm | 1.28 | 0.992 | 0.999 |
@@ -58,27 +66,27 @@ RMS(WIND − CONTROL) / RMS(CTLPERT − CONTROL) over cells in each band; ≈1 m
 
 ## Country consistency across events
 
-Countries flagged in more than one event: 1; countries with the same sign of ΔP in every event: 3/20. Full table: `results/wrf/programme_country.csv`.
+Countries flagged in more than one event: 2; countries with the same sign of ΔP in every event: 2/20. Full table: `results/wrf/programme_country.csv`.
 
 | country | events | flagged | ΔP>0 events | mean z | max |z| |
 |---|---|---|---|---|---|
-| GB | 4 | 1 | 0 | -4.7 | 17 |
-| RU | 4 | 2 | 3 | 1.7 | 8.2 |
-| BE | 4 | 1 | 1 | -1.3 | 4.7 |
-| NO | 4 | 1 | 2 | -0.74 | 4 |
-| IM | 4 | 1 | 3 | 1.4 | 4 |
-| AT | 4 | 0 | 2 | -0.41 | 3.5 |
-| EE | 4 | 0 | 0 | -1.8 | 3.2 |
-| DK | 4 | 0 | 0 | -1 | 2.7 |
-| SE | 4 | 0 | 2 | -0.0072 | 2.6 |
-| NL | 4 | 0 | 3 | 0.8 | 2.5 |
-| FR | 4 | 0 | 3 | 0.0036 | 1.9 |
-| LV | 4 | 0 | 2 | -0.035 | 1.9 |
-| DE | 4 | 0 | 1 | -0.44 | 1.6 |
-| GG | 4 | 0 | 2 | -0.12 | 1.3 |
-| PL | 4 | 0 | 2 | 0.31 | 1.3 |
-| LT | 4 | 0 | 1 | -0.096 | 1.3 |
-| SK | 4 | 0 | 2 | 0.2 | 1.3 |
-| HU | 4 | 0 | 3 | -0.15 | 1.3 |
-| LU | 4 | 0 | 3 | -0.12 | 0.81 |
-| CZ | 4 | 0 | 2 | -0.32 | 0.71 |
+| GB | 5 | 1 | 0 | -4.2 | 17 |
+| RU | 5 | 2 | 4 | 1.4 | 8.2 |
+| BE | 5 | 2 | 1 | -2 | 4.7 |
+| NO | 5 | 1 | 3 | -0.14 | 4 |
+| IM | 5 | 1 | 4 | 1.1 | 4 |
+| AT | 5 | 0 | 2 | -0.14 | 3.5 |
+| EE | 5 | 0 | 1 | -1.5 | 3.2 |
+| LV | 5 | 0 | 3 | 0.52 | 2.8 |
+| DK | 5 | 0 | 0 | -0.84 | 2.7 |
+| SE | 5 | 0 | 3 | 0.15 | 2.6 |
+| NL | 5 | 0 | 3 | 0.38 | 2.5 |
+| FR | 5 | 0 | 3 | -0.1 | 1.9 |
+| LT | 5 | 0 | 2 | 0.29 | 1.9 |
+| DE | 5 | 0 | 1 | -0.64 | 1.6 |
+| SK | 5 | 0 | 3 | 0.46 | 1.5 |
+| LU | 5 | 0 | 3 | -0.36 | 1.4 |
+| GG | 5 | 0 | 3 | -0.07 | 1.3 |
+| PL | 5 | 0 | 2 | 0.091 | 1.3 |
+| HU | 5 | 0 | 4 | -0.028 | 1.3 |
+| CZ | 5 | 0 | 3 | -0.35 | 0.71 |

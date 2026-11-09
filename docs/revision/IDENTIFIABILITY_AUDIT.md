@@ -32,6 +32,7 @@ used only to judge whether the dynamic term is plausibly negligible, not as grou
 - `e2016sw`: 19 countries; median |S/C| = 0.000139, max |S/C| = 0.00173; same sign 11/19; |C| exceeds single-member noise in 1/19
 - `e2016w`: 19 countries; median |S/C| = 0.00248, max |S/C| = 0.0802; same sign 8/19; |C| exceeds single-member noise in 0/19
 - `e2017w`: 19 countries; median |S/C| = 9.12e-05, max |S/C| = 0.00151; same sign 9/19; |C| exceeds single-member noise in 3/19
+- `e2021nw`: 19 countries; median |S/C| = 0.00283, max |S/C| = 0.0548; same sign 9/19; |C| exceeds single-member noise in 1/19
 - `pilot_2020w1`: 19 countries; median |S/C| = 0.00352, max |S/C| = 0.0177; same sign 7/19; |C| exceeds single-member noise in 2/19
 - `e2016sw` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1', 'CTLPERT_2', 'CTLPERT_3'] by distance band:
   - P_acc_mm: farm_0_30km 1.08, near_30_150km 1, far_gt150km 0.961
@@ -51,6 +52,12 @@ used only to judge whether the dynamic term is plausibly negligible, not as grou
   - hub_wind: farm_0_30km 6.62, near_30_150km 1.48, far_gt150km 1.07
   - IVTx: farm_0_30km 2.32, near_30_150km 1.35, far_gt150km 1.07
   - PBLH: farm_0_30km 3.36, near_30_150km 1.11, far_gt150km 1.05
+- `e2021nw` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1', 'CTLPERT_2', 'CTLPERT_3'] by distance band:
+  - P_acc_mm: farm_0_30km 1, near_30_150km 1.01, far_gt150km 0.964
+  - E_acc_mm: farm_0_30km 2.46, near_30_150km 0.968, far_gt150km 0.993
+  - hub_wind: farm_0_30km 6.56, near_30_150km 1.15, far_gt150km 0.923
+  - IVTx: farm_0_30km 1.6, near_30_150km 1.09, far_gt150km 0.984
+  - PBLH: farm_0_30km 2.41, near_30_150km 1.01, far_gt150km 0.98
 - `pilot_2020w1` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1', 'CTLPERT_2', 'CTLPERT_3'] by distance band:
   - P_acc_mm: farm_0_30km 1.14, near_30_150km 1, far_gt150km 1.04
   - E_acc_mm: farm_0_30km 1.28, near_30_150km 0.992, far_gt150km 0.999

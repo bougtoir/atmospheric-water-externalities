@@ -23,9 +23,9 @@ effect and is not an observation.
 
 ## Summary
 
-Events: 4; country-event pairs: 80; outside internal variability: 6 (pooled binomial reference P(X ≥ 6) = 0.211 under a 5 % rate).
-Countries flagged in ≥2 events: 1.
-Supply-channel scenario [S] magnitude relative to the no-wind noise half-width: median 0.00015, maximum 0.016.
+Events: 5; country-event pairs: 100; outside internal variability: 7 (pooled binomial reference P(X ≥ 7) = 0.234 under a 5 % rate).
+Countries flagged in ≥2 events: 2.
+Supply-channel scenario [S] magnitude relative to the no-wind noise half-width: median 0.0002, maximum 0.022.
 
 | case | country | ΔP (kg) | ΔP (mm) | ΔP / P_CONTROL | 95 % PI half-width (kg) | z | outside | [S] ΔP (kg) |
 |---|---|---|---|---|---|---|---|---|
@@ -89,6 +89,26 @@ Supply-channel scenario [S] magnitude relative to the no-wind noise half-width: 
 | e2017w | RU | -9.3e+09 | -0.894 | -0.033 | 1.18e+10 | -3.9 | True | 4.7e+06 |
 | e2017w | SE | 3.15e+10 | 0.229 | 0.011 | 4.38e+10 | 2.6 | False | 7.68e+06 |
 | e2017w | SK | 3.63e+10 | 1.05 | 0.033 | 1.35e+11 | 0.55 | False | 2.67e+05 |
+| e2021nw | AT | -7.5e+08 | -0.0217 | -0.00043 | 2.64e+10 | 0.92 | False | -2.91e+07 |
+| e2021nw | BE | -7.14e+09 | -0.235 | -0.026 | 4.61e+09 | -4.6 | True | -1.68e+07 |
+| e2021nw | CZ | 1.92e+10 | 0.247 | 0.01 | 2.38e+11 | -0.48 | False | -2.14e+07 |
+| e2021nw | DE | -4e+10 | -0.117 | -0.0071 | 5.66e+10 | -1.4 | False | -1.53e+08 |
+| e2021nw | DK | -1.53e+10 | -0.37 | -0.012 | 4.21e+10 | -0.061 | False | -4.32e+07 |
+| e2021nw | EE | 2.04e+09 | 0.43 | 0.0063 | 2.29e+10 | -0.52 | False | -1.8e+07 |
+| e2021nw | FR | -8.47e+09 | -0.0458 | -0.0066 | 1.51e+10 | -0.52 | False | -8.67e+07 |
+| e2021nw | GB | -5.58e+09 | -0.025 | -0.0037 | 5.59e+09 | -2.1 | False | -9.93e+07 |
+| e2021nw | GG | 1.1e+06 | 0.0049 | 0.003 | 4.59e+07 | 0.14 | False | nan |
+| e2021nw | HU | 3.96e+09 | 0.268 | 0.016 | 9.4e+09 | 0.44 | False | -8.96e+06 |
+| e2021nw | IM | 2.82e+07 | 0.0312 | 0.0039 | 1.18e+08 | -0.36 | False | -7.38e+04 |
+| e2021nw | LT | 1.99e+10 | 1.7 | 0.039 | 2.63e+10 | 1.9 | False | -2.07e+07 |
+| e2021nw | LU | -2.66e+08 | -0.108 | -0.023 | 4.65e+08 | -1.4 | False | -6.28e+05 |
+| e2021nw | LV | 8.84e+09 | 0.622 | 0.0097 | 2.07e+10 | 2.8 | False | -2.1e+07 |
+| e2021nw | NL | -1.57e+09 | -0.0422 | -0.0034 | 4.39e+09 | -1.3 | False | -2.86e+07 |
+| e2021nw | NO | 6.85e+09 | 0.118 | 0.0066 | 2.11e+10 | 2.2 | False | -1.38e+08 |
+| e2021nw | PL | -4.08e+10 | -0.184 | -0.0095 | 1.65e+11 | -0.79 | False | -9.52e+07 |
+| e2021nw | RU | 2.35e+09 | 0.226 | 0.016 | 5.91e+09 | 0.019 | False | -1.29e+08 |
+| e2021nw | SE | 5.54e+10 | 0.403 | 0.011 | 8.77e+10 | 0.76 | False | -2.2e+08 |
+| e2021nw | SK | 7.58e+10 | 2.2 | 0.05 | 1.8e+11 | 1.5 | False | -8.23e+06 |
 | pilot_2020w1 | AT | -6.82e+10 | -2.04 | -0.043 | 4.89e+10 | -3.5 | False | 1.07e+07 |
 | pilot_2020w1 | BE | -1.16e+09 | -0.0382 | -0.0019 | 1.16e+10 | -1 | False | 4.09e+06 |
 | pilot_2020w1 | CZ | -1.63e+10 | -0.212 | -0.011 | 4.74e+10 | -0.22 | False | 6.81e+06 |

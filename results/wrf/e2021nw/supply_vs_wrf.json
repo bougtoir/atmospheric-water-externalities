@@ -1,0 +1,11 @@
+{
+ "case": "e2021nw",
+ "year": 2021,
+ "dE_farm_kg": -6906656256.0,
+ "n_countries": 19,
+ "sum_abs_S_kg": 1137725075.5063663,
+ "sum_abs_C_kg": 314318377777.625,
+ "n_same_sign": 9,
+ "n_C_exceeds_noise": 1,
+ "noise_reference": "no-wind ensemble n=4 (95% prediction interval)"
+}
