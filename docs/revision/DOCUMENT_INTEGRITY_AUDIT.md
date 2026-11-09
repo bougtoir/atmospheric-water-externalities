@@ -6,10 +6,10 @@ Status: **PASS**.
 
 | file | bytes | sha256 | zip_ok | comments | tracked_changes |
 |---|---|---|---|---|---|
-| manuscript/manuscript.docx | 48425 | 52706567e07269a8edf71e992522e105fd6e03b0f672e06414b863af4d833260 | True | False | False |
-| submission/highlights.docx | 36858 | e8b166134a4cab99c3ea104e27470355dd223f273a1090c5252a9a3ebd4bbf8f | True | False | False |
-| submission/cover_letter.docx | 37435 | bfffcb68a25d7c9eed26fbfae5aeb215b7701cdf8d8af7ce21ba62b84bf2907a | True | False | False |
-| TAWE_EMS_submission.zip | 8486798 | e5a791a9e42985d33770a7b12d19762612c3dab545d971b565795c6b66c36096 | True | False | False |
-| TAWE_reproducibility.zip | 3137598 | c532a4bf808b04ff5a4cf6eb57acb970fe922c1bcafeb4900723a605476719ea | True | False | False |
+| manuscript/manuscript.docx | 48425 | f2894ac059cf683751450042a04887b9b6b69d8eeb51464d264ad0926d708d5e | True | False | False |
+| submission/highlights.docx | 36858 | 08cce524af35a8a1b916f10aed4249aba0ba78d298a3d7988a6d8d7ed2be7b0a | True | False | False |
+| submission/cover_letter.docx | 37435 | 5cc30ffaab07ce2537bc625a3d52d8d4b0182825d5114b8d212d50417aab9d92 | True | False | False |
+| TAWE_EMS_submission.zip | 8486798 | 77fcd24d380063ac4ee17151f0a4e4ca5e73805f1cb9c6e77849a9784e9a2646 | True | False | False |
+| TAWE_reproducibility.zip | 3137598 | 0ccc8593657ff5e0b71b04d9fcdd15a91a9c24a1cb46fc51573c6f1a71b827df | True | False | False |
 
 Submission ZIP entries: 26.
