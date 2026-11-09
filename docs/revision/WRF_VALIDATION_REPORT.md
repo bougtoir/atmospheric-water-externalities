@@ -9,9 +9,11 @@ precipitation, no CFL messages. Per-case detail: `docs/revision/wrf_cases/*_NUME
 
 | case | experiment | status | QC | wall-clock (s) | archive objects | read-back verified |
 |---|---|---|---|---|---|---|
-| e2016sw | CONTROL | SUCCESS |  | 11357 | 0 | False |
-| e2016sw | WIND | SUCCESS |  | 12927 | 0 | False |
-| e2016sw | CTLPERT_1 | SUCCESS |  | 12829 | 0 | False |
+| e2016sw | CONTROL | SUCCESS | True | 11357 | 33 | True |
+| e2016sw | WIND | SUCCESS | True | 12927 | 41 | True |
+| e2016sw | CTLPERT_1 | SUCCESS | True | 12829 | 34 | True |
+| e2016sw | CTLPERT_2 | SUCCESS | True | 29309 | 34 | True |
+| e2016sw | CTLPERT_3 | SUCCESS | True | 12255 | 34 | True |
 | e2016w | CONTROL | SUCCESS | True | 10834 | 33 | True |
 | e2016w | WIND | SUCCESS | True | 9686 | 41 | True |
 | e2016w | CTLPERT_1 | SUCCESS | True | 9702 | 34 | True |
@@ -35,6 +37,11 @@ ERA5 is itself a model product; agreement is a plausibility check, not validatio
 
 | case | field | WRF mean | ERA5 mean | relative bias | RMSE | spatial r |
 |---|---|---|---|---|---|---|
+| e2016sw | P_acc_mm | 15.94 | 12.13 | 0.315 | 10.91 | 0.773 |
+| e2016sw | E_acc_mm | 17.08 | 14.25 | 0.198 | 4.929 | 0.597 |
+| e2016sw | W | 23.64 | 23.39 | 0.0106 | 0.7272 | 0.975 |
+| e2016sw | IVTx | 214.5 | 218.6 | -0.0185 | 15.17 | 0.972 |
+| e2016sw | IVTy | 32.64 | 32.28 | 0.0113 | 30.87 | 0.959 |
 | e2016w | P_acc_mm | 18.57 | 14.66 | 0.266 | 13.1 | 0.534 |
 | e2016w | E_acc_mm | 14.76 | 11.91 | 0.239 | 5.743 | 0.849 |
 | e2016w | W | 25.66 | 25.31 | 0.0138 | 0.7307 | 0.972 |

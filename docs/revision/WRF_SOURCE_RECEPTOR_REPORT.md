@@ -23,12 +23,32 @@ effect and is not an observation.
 
 ## Summary
 
-Events: 3; country-event pairs: 60; outside internal variability: 5 (pooled binomial reference P(X ≥ 5) = 0.18 under a 5 % rate).
+Events: 4; country-event pairs: 80; outside internal variability: 6 (pooled binomial reference P(X ≥ 6) = 0.211 under a 5 % rate).
 Countries flagged in ≥2 events: 1.
-Supply-channel scenario [S] magnitude relative to the no-wind noise half-width: median 0.0002, maximum 0.016.
+Supply-channel scenario [S] magnitude relative to the no-wind noise half-width: median 0.00015, maximum 0.016.
 
 | case | country | ΔP (kg) | ΔP (mm) | ΔP / P_CONTROL | 95 % PI half-width (kg) | z | outside | [S] ΔP (kg) |
 |---|---|---|---|---|---|---|---|---|
+| e2016sw | AT | 8.65e+08 | 0.0261 | 0.0018 | 1.29e+10 | 0.54 | False | 6.45e+05 |
+| e2016sw | BE | -3.66e+09 | -0.12 | -0.024 | 2.92e+09 | -4.7 | True | 4.35e+05 |
+| e2016sw | CZ | 9.92e+09 | 0.128 | 0.0063 | 4.99e+10 | -0.24 | False | 2.94e+05 |
+| e2016sw | DE | -3.17e+10 | -0.0922 | -0.0045 | 4.55e+10 | -1.2 | False | 2.84e+06 |
+| e2016sw | DK | -1.61e+09 | -0.0387 | -0.003 | 8.11e+09 | -1.6 | False | 1.05e+06 |
+| e2016sw | EE | -1.01e+10 | -2.15 | -0.035 | 1.43e+10 | -3.2 | False | 6.86e+05 |
+| e2016sw | FR | 1.82e+09 | 0.00988 | 0.0016 | 1.27e+10 | -0.71 | False | 1.5e+06 |
+| e2016sw | GB | -4.48e+09 | -0.02 | -0.0018 | 6.53e+09 | -1.3 | False | 2.21e+06 |
+| e2016sw | GG | 1.55e+07 | 0.0689 | 0.03 | 2.89e+07 | 1.3 | False | nan |
+| e2016sw | HU | -8.5e+09 | -0.576 | -0.046 | 1.42e+10 | -1.3 | False | 3.47e+05 |
+| e2016sw | IM | 5.76e+07 | 0.0637 | 0.012 | 1.07e+08 | 0.49 | False | 907 |
+| e2016sw | LT | -6.49e+09 | -0.552 | -0.01 | 1.91e+10 | -0.094 | False | 9.01e+05 |
+| e2016sw | LU | 5.18e+08 | 0.209 | 0.046 | 1.8e+09 | 0.35 | False | 1.7e+04 |
+| e2016sw | LV | 3.98e+09 | 0.28 | 0.0085 | 1.12e+10 | 1.9 | False | 1.01e+06 |
+| e2016sw | NL | 3.57e+09 | 0.0959 | 0.013 | 7.53e+09 | 0.87 | False | 7.19e+05 |
+| e2016sw | NO | 1.95e+10 | 0.339 | 0.005 | 8.48e+10 | -0.56 | False | 4.57e+06 |
+| e2016sw | PL | 2.71e+10 | 0.122 | 0.0057 | 4.82e+10 | 0.52 | False | 2.14e+06 |
+| e2016sw | RU | 3.07e+09 | 0.295 | 0.0076 | 2.82e+10 | 0.98 | False | 5.31e+06 |
+| e2016sw | SE | 4.16e+09 | 0.0303 | 0.0016 | 1.91e+10 | -0.23 | False | 5.61e+06 |
+| e2016sw | SK | -4.93e+09 | -0.143 | -0.01 | 1.28e+10 | -1.3 | False | 2.69e+05 |
 | e2016w | AT | 4.82e+09 | 0.143 | 0.0039 | 3e+10 | 0.86 | False | 5.13e+06 |
 | e2016w | BE | -2.06e+08 | -0.00685 | -0.00088 | 9.06e+09 | 0.28 | False | 3.46e+06 |
 | e2016w | CZ | -1.04e+10 | -0.133 | -0.0033 | 2.41e+11 | -0.71 | False | 2.34e+06 |
