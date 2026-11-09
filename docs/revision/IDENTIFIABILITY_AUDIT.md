@@ -29,9 +29,16 @@ dynamic perturbation is zero (see `KNOWN_TRUTH_VALIDATION.md`).
 WRF [C] contrasts are model-conditional (fixed WRF v4.6.1 configuration, generic turbine curves) and are
 used only to judge whether the dynamic term is plausibly negligible, not as ground truth.
 
+- `e2016sw`: 19 countries; median |S/C| = 0.000139, max |S/C| = 0.00173; same sign 11/19; |C| exceeds single-member noise in 1/19
 - `e2016w`: 19 countries; median |S/C| = 0.00248, max |S/C| = 0.0802; same sign 8/19; |C| exceeds single-member noise in 0/19
 - `e2017w`: 19 countries; median |S/C| = 9.12e-05, max |S/C| = 0.00151; same sign 9/19; |C| exceeds single-member noise in 3/19
 - `pilot_2020w1`: 19 countries; median |S/C| = 0.00352, max |S/C| = 0.0177; same sign 7/19; |C| exceeds single-member noise in 2/19
+- `e2016sw` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1', 'CTLPERT_2', 'CTLPERT_3'] by distance band:
+  - P_acc_mm: farm_0_30km 1.08, near_30_150km 1, far_gt150km 0.961
+  - E_acc_mm: farm_0_30km 1.28, near_30_150km 1.06, far_gt150km 1
+  - hub_wind: farm_0_30km 5.59, near_30_150km 1.2, far_gt150km 0.991
+  - IVTx: farm_0_30km 1.88, near_30_150km 1.05, far_gt150km 1
+  - PBLH: farm_0_30km 1.43, near_30_150km 1.03, far_gt150km 0.98
 - `e2016w` RMS(WIND−CONTROL)/mean RMS(member−CONTROL), members ['CTLPERT_1', 'CTLPERT_2', 'CTLPERT_3'] by distance band:
   - P_acc_mm: farm_0_30km 0.977, near_30_150km 1.03, far_gt150km 1.03
   - E_acc_mm: farm_0_30km 0.931, near_30_150km 1.12, far_gt150km 1.01
