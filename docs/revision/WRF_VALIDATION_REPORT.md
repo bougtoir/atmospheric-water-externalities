@@ -24,11 +24,11 @@ precipitation, no CFL messages. Per-case detail: `docs/revision/wrf_cases/*_NUME
 | e2017w | CTLPERT_1 | SUCCESS | True | 10223 | 34 | True |
 | e2017w | CTLPERT_2 | SUCCESS | True | 9629 | 34 | True |
 | e2017w | CTLPERT_3 | SUCCESS | True | 9668 | 34 | True |
-| e2021nw | CONTROL | SUCCESS | True | 11739 | 0 | False |
-| e2021nw | WIND | SUCCESS | True | 12134 | 0 | False |
-| e2021nw | CTLPERT_1 | SUCCESS | True | 13229 | 0 | False |
-| e2021nw | CTLPERT_2 | SUCCESS | True | 12712 | 0 | False |
-| e2021nw | CTLPERT_3 | SUCCESS | True | 12733 | 0 | False |
+| e2021nw | CONTROL | SUCCESS | True | 11739 | 33 | True |
+| e2021nw | WIND | SUCCESS | True | 12134 | 43 | True |
+| e2021nw | CTLPERT_1 | SUCCESS | True | 13229 | 34 | True |
+| e2021nw | CTLPERT_2 | SUCCESS | True | 12712 | 34 | True |
+| e2021nw | CTLPERT_3 | SUCCESS | True | 12733 | 34 | True |
 | pilot_2020w1 | CONTROL | SUCCESS | True | 11891 | 33 | True |
 | pilot_2020w1 | WIND | SUCCESS | True | 11133 | 43 | True |
 | pilot_2020w1 | CTLPERT_1_INVALID_unperturbed_THM | SUCCESS (INVALID: THM not perturbed, output bit-identical to CONTROL; rerun) |  |  | 34 | True |

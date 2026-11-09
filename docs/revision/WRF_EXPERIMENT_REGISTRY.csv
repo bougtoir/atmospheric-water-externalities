@@ -14,11 +14,11 @@ e2017w,WIND,westerly,2017-06-22,2017-06-26,1,False,SUCCESS,True,10977,True,42,Tr
 e2017w,CTLPERT_1,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,10223,True,34,True
 e2017w,CTLPERT_2,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,9629,True,34,True
 e2017w,CTLPERT_3,westerly,2017-06-22,2017-06-26,0,True,SUCCESS,True,9668,True,34,True
-e2021nw,CONTROL,northwesterly,2021-08-14,2021-08-18,0,False,SUCCESS,True,11739,True,0,False
-e2021nw,WIND,northwesterly,2021-08-14,2021-08-18,1,False,SUCCESS,True,12134,True,0,False
-e2021nw,CTLPERT_1,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,13229,True,0,False
-e2021nw,CTLPERT_2,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,12712,True,0,False
-e2021nw,CTLPERT_3,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,12733,True,0,False
+e2021nw,CONTROL,northwesterly,2021-08-14,2021-08-18,0,False,SUCCESS,True,11739,True,33,True
+e2021nw,WIND,northwesterly,2021-08-14,2021-08-18,1,False,SUCCESS,True,12134,True,43,True
+e2021nw,CTLPERT_1,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,13229,True,34,True
+e2021nw,CTLPERT_2,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,12712,True,34,True
+e2021nw,CTLPERT_3,northwesterly,2021-08-14,2021-08-18,0,True,SUCCESS,True,12733,True,34,True
 pilot_2020w1,CONTROL,westerly,2020-07-01,2020-07-05,0,False,SUCCESS,True,11891,True,33,True
 pilot_2020w1,WIND,westerly,2020-07-01,2020-07-05,1,False,SUCCESS,True,11133,True,43,True
 pilot_2020w1,CTLPERT_1_INVALID_unperturbed_THM,westerly,2020-07-01,2020-07-05,0,True,"SUCCESS (INVALID: THM not perturbed, output bit-identical to CONTROL; rerun)",False,,,34,True
