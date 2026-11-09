@@ -49,7 +49,9 @@ axs[0].set_ylabel("Δ precipitation (10⁹ kg)"); axs[0].legend(fontsize=6); sav
 # Figure 4: mean tagged precipitation map (ALL tag), mm per season
 P = np.mean([np.load(f"data/processed/track_{y}.npz")["P_tag"][list(np.load(f"data/processed/track_{y}.npz")["names"]).index("ALL")] for y in years], axis=0)
 fig, ax = plt.subplots(figsize=(6, 4.2))
-im = ax.imshow(np.log10(np.maximum(P, 1e-6)), extent=ext, cmap="viridis", vmin=-3, vmax=1, aspect="auto")
+Pmm = P / area  # P_tag is kg per cell; kg m-2 = mm
+lv = np.log10(np.maximum(Pmm, 1e-9)); hi = np.ceil(np.nanmax(lv)); lo = hi - 4
+im = ax.imshow(lv, extent=ext, cmap="viridis", vmin=lo, vmax=hi, aspect="auto")
 ax.contour(lon, lat, land.astype(float), [0.5], colors="w", linewidths=0.4)
 plt.colorbar(im, ax=ax, label="log10 tagged precipitation (mm per JJA)"); ax.set_xlabel("Longitude (°E)"); ax.set_ylabel("Latitude (°N)")
 ax.set_title(f"Precipitation of farm-cell evaporation origin, JJA mean {years[0]}–{years[-1]}"); save(fig, 4)
