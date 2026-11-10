@@ -3,13 +3,15 @@
 Outputs figures/wrf/Figure_W<n>.{png,pdf}. Contrasts are model-conditional WRF v4.6.1 WIND-CONTROL differences."""
 import glob, json, os, pathlib, re
 import numpy as np, pandas as pd, xarray as xr, matplotlib
+from scipy import stats
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 
 F = pathlib.Path("figures/wrf"); F.mkdir(parents=True, exist_ok=True)
 plt.rcParams.update({"font.size": 8, "font.family": "DejaVu Sans"})
 cases = sorted(os.path.basename(os.path.dirname(p)) for p in glob.glob("results/wrf/*/maps.nc"))
+NOWE = ["CONTROL", "CTLPERT_1", "CTLPERT_2", "CTLPERT_3"]
 def save(fig, n):
-    fig.savefig(F / f"Figure_W{n}.png", dpi=600, bbox_inches="tight"); fig.savefig(F / f"Figure_W{n}.pdf", bbox_inches="tight"); plt.close(fig)
+    fig.savefig(F / f"Figure_W{n}.png", dpi=600, bbox_inches="tight"); fig.savefig(F / f"Figure_W{n}.pdf", bbox_inches="tight", metadata={"CreationDate": None}); plt.close(fig)
 mp = {c: xr.open_dataset(f"results/wrf/{c}/maps.nc") for c in cases}
 members = {c: sorted({m.group(1) for v in mp[c].data_vars if (m := re.match(r"P_acc_mm_(CTLPERT_\d+)$", v))}) for c in cases}
 
@@ -85,8 +87,34 @@ for i, c in enumerate(va):
 for a, t in zip(axs, ["relative bias vs ERA5 (not defined for northward IVT)", "spatial correlation vs ERA5"]):
     a.set_xticks(np.arange(len(vf)) + .4 - .4 / len(va)); a.set_xticklabels([VL.get(f, f) for f in vf], rotation=45, fontsize=6); a.set_title(t, fontsize=7); a.axhline(0, color="k", lw=.5)
 axs[0].legend(fontsize=5); save(fig, 5)
+# W6: temporal evolution of the no-wind ensemble spread (archived 3-hourly output; scripts/wrf/w18_spread_growth.py)
+sg = {c: pd.read_csv(f"results/wrf/{c}/spread_growth.csv", parse_dates=["time"]) for c in cases if os.path.exists(f"results/wrf/{c}/spread_growth.csv")}
+SL = {"hub_wind": "hub-height wind", "P_3h": "3-h precipitation", "W": "column water vapour", "IVT": "|IVT|"}
+fig, axs = plt.subplots(2, 3, figsize=(7.2, 4.4)); axs = axs.ravel()
+for i, (f, lab) in enumerate(SL.items()):
+    a = axs[i]
+    for c, d in sg.items():
+        x = d[(d.field == f) & (d.band == "far_gt150km")]
+        a.plot(x.lead_h, x.spread / x.sigma_time, lw=.8, label=c)
+    a.axvline(24, color="0.5", ls=":", lw=.6); a.set_title(f"{lab}, > 150 km from farms", fontsize=7)
+    a.set_xlabel("lead time (h)", fontsize=6); a.set_ylabel("spread / temporal SD", fontsize=6); a.tick_params(labelsize=6)
+a = axs[4]
+for c, d in sg.items():
+    x = d[(d.field == "hub_wind") & (d.band == "far_gt150km") & d.in_window]
+    a.plot(x.lead_h, x.d_pert_pert / x.d_ctl_pert, lw=.8)
+a.axhline(1, color="k", lw=.5); a.axhline(np.sqrt(2), color="r", lw=.5, ls="--")
+a.set_title("d(pert,pert) / d(CONTROL,pert), hub wind", fontsize=7); a.set_xlabel("lead time (h)", fontsize=6); a.tick_params(labelsize=6)
+a.text(0.02, 0.04, "1: exchangeable;  √2 (dashed): CONTROL-centred", transform=a.transAxes, fontsize=5)
+a = axs[5]
+for c in sg:
+    q = pd.read_csv(f"results/wrf/{c}/country_precip_time.csv", parse_dates=["time"]).pivot_table(index=["time", "country"], columns="exp", values="P_acc_kg")
+    m, s_ = q[NOWE].mean(1), q[NOWE].std(1, ddof=1)
+    fl = ((q.WIND - m).abs() > stats.t.ppf(0.975, 3) * s_ * np.sqrt(1.25)).groupby(level=0).sum()
+    a.step((fl.index - fl.index[0]) / pd.Timedelta(hours=1), fl.values, lw=.8, where="post")
+a.set_title("countries outside the 95% prediction interval", fontsize=7); a.set_xlabel("hours after spin-up", fontsize=6); a.set_ylabel("count", fontsize=6); a.tick_params(labelsize=6)
+axs[0].legend(fontsize=5); fig.tight_layout(); save(fig, 6)
 import shutil
-for w, n in {1: 7, 5: 8, 3: 9, 2: 10, 4: 11}.items():  # manuscript numbering = order of first citation
+for w, n in {1: 7, 5: 8, 3: 9, 2: 10, 4: 11, 6: 12}.items():  # manuscript numbering = order of first citation
     for ext in ("png", "pdf"):
         shutil.copyfile(F / f"Figure_W{w}.{ext}", pathlib.Path("figures") / f"Figure_{n}.{ext}")
 print("wrote", sorted(p.name for p in F.glob("*.png")), cases)

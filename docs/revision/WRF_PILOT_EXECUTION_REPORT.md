@@ -104,7 +104,11 @@ Mean simulated fleet power: 13.78 GW
 | HU | 66 | 8.365e+11 | 2.733e+10 | 1.85 | 2.407e+09 |
 
 
-## Signal versus single-member noise reference (WIND−CONTROL vs CTLPERT_1−CONTROL)
+## Pilot-stage signal versus one perturbed member (WIND−CONTROL vs CTLPERT_1−CONTROL)
+
+> Superseded. This section records the pilot stage, when only CTLPERT_1 existed. The final analysis compares WIND with the
+> 95% prediction interval derived from the four-member no-wind ensemble (CONTROL, CTLPERT_1–3); see
+> WRF_MAIN_EXPERIMENT_REPORT.md and WRF_PREDICTION_INTERVAL_AUDIT.md. The values below are pilot-stage values.
 
 From `results/wrf/pilot_2020w1/signal_noise.json` (`scripts/wrf/w10_signal_noise.py`). RMS over inner-domain cells by
 distance from the nearest farm cell. One perturbed member is one draw of intrinsic variability; ratios are descriptive.

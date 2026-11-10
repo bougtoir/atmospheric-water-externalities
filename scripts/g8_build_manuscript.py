@@ -82,6 +82,17 @@ va = {c: json.load(open(R / f"wrf/{c}/validation.json"))["fields"] for c in WC}
 V["w_vbP_min"] = min(v["P_acc_mm"]["rel_bias"] for v in va.values()); V["w_vbP_max"] = max(v["P_acc_mm"]["rel_bias"] for v in va.values())
 V["w_vrP_min"] = min(v["P_acc_mm"]["spatial_r"] for v in va.values()); V["w_vrP_max"] = max(v["P_acc_mm"]["spatial_r"] for v in va.values())
 V["w_vrW_min"] = min(v["W"]["spatial_r"] for v in va.values())
+SG = json.load(open(R / "wrf/spread_growth_summary.json")); PA = json.load(open(R / "wrf/pi_audit.json"))
+INST = ["hub_wind", "W", "IVT", "P_3h"]
+V["sg_n"] = len(SG); V["sg_sat_max"] = max(SG[c]["fields"][f]["far_gt150km"]["sat_end"] for c in SG for f in INST)
+V["sg_grow"] = sum(np.median([SG[c]["fields"][f]["far_gt150km"]["growth_24"] for f in INST]) > 1 for c in SG)
+V["sg_rpp_min"] = min(SG[c]["fields"][f]["far_gt150km"]["r_pp_cp"] for c in SG for f in INST)
+V["sg_rpp_max"] = max(SG[c]["fields"][f]["far_gt150km"]["r_pp_cp"] for c in SG for f in INST)
+V["sg_fl_max"] = max(SG[c]["flags_max_any_hour"] for c in SG); V["sg_fl_min"] = min(SG[c]["flags_min_after_24h"] for c in SG)
+V["pa_kappa"] = PA["pooled"]["kappa_hat"]; V["pa_cov"] = PA["pooled"]["coverage_at_kappa_hat"]
+V["pa_cov_c1"] = PA["coverage_mc"]["centred"]["0.9"]; V["pa_cov_t3"] = PA["coverage_mc"]["iid_t3"]
+V["pa_loo"], V["pa_loo_n"] = PA["pooled"]["loo_flags"], PA["pooled"]["loo_tests"]; V["pa_loo_lo"], V["pa_loo_hi"] = PA["pooled"]["loo_binom_ci"]
+V["kt_dk"] = ", ".join(f"{x:+g}" if x else "0" for x in sorted(kt.delta_k.unique())); V["kt_du"] = ", ".join(f"{x:+g}" if x else "0" for x in sorted(kt.delta_u.unique()))
 json.dump({k: (float(v) if isinstance(v, (np.floating, float)) else v) for k, v in V.items()}, open(R / "manuscript_values.json", "w"), indent=1, default=str)
 
 # ---- citation helpers (author-year)
@@ -117,12 +128,13 @@ H("Abstract")
 ABS = (f"Energy infrastructure that alters evaporation or near-surface flow can shift precipitation across borders, "
        f"but moisture tracking reports where existing moisture rains out, not what an intervention changes. This study "
        f"separates moisture provenance accounting, a supply-channel scenario and model-conditional intervention contrasts, and "
-       f"releases a conservation-closed tagging tool. In known-truth worlds the supply estimator reverses sign at the far "
-       f"receptor in {V['kt_flip_c2']} of {V['kt_n_c2']} dynamic cases. For European offshore wind farms (ERA5, summers "
+       f"releases a conservation-closed tagging tool. In a known-truth world the supply estimator reverses sign at the far "
+       f"receptor in {V['kt_flip_c2']} of {V['kt_n_c2']} dynamic configurations of a prespecified synthetic grid. For European offshore wind farms (ERA5, summers "
        f"{V['y0']}–{V['y1']}), {pct(V['land_mean'])} of farm-cell evaporation rains over land, mostly abroad, but placebo "
        f"sources reproduce {V['pl_inside']} of {V['pl_n']} receptor coefficients. Paired WRF simulations with and without a "
        f"wind-farm parameterisation ({V['w_events']} events, {V['w_nens']}-member no-wind ensembles) give clear near-farm "
-       f"wind and boundary-layer responses, whereas cross-border precipitation contrasts remain within internal variability.")
+       f"wind and boundary-layer responses, whereas cross-border precipitation contrasts are not distinguishable from internal "
+       f"variability as estimated by these small ensembles, whose spread had not saturated; this is not evidence of zero effect.")
 Pp(ABS)
 Pp("Keywords: moisture tracking; precipitationshed; offshore wind; identifiability; counterfactual; ERA5; externalities")
 
@@ -171,6 +183,14 @@ Pp("The supply channel routes perturbed source evaporation with unchanged winds 
    "[S] scenario (Eq. 5 for a stated ΔE_S) or [C] model-conditional contrast (Eq. 4 from an executed pair of simulations "
    "that differ only in the intervention). A [C] contrast is conditional on the model, its configuration and the "
    "simulated events; it is not an observed real-world effect (Fig. 1).")
+Pp("Δ_supply is a functional of the observed state and an assumed ΔE_S. Δ_dynamic, which here includes the interaction "
+   "of supply and dynamic changes, depends on the counterfactual state and is not constrained by the observables used "
+   "for accounting. Within this model class, Eq. (4) is therefore not point-identified from reanalysis unless Δ_dynamic is "
+   "restricted by an additional assumption. If |Δ_dynamic| ≤ B is assumed, the identified set is")
+eq(sub("TAWE", "j→c") + r(" ∈ [") + sub("Δ", "supply") + r(" − B, ") + sub("Δ", "supply") + r(" + B]"), 6)
+Pp("and the sign is identified only if |Δ_supply| > B. The set is as credible as B. A maximum over a finite synthetic "
+   "grid (Section 4.2) or a statistical interval for internal variability (Section 3.5) is not a physical bound on the "
+   "dynamic response, and no physically justified bound is available here.")
 
 H("3. Software, data and evaluation design")
 H("3.1. Tagging tool", 2)
@@ -198,7 +218,11 @@ H("3.4. Known-truth experiments", 2)
 Pp("An idealised linear moisture world (dW/dt + ∇·(uW) = E − kW, eastward flow of 8 m s⁻¹, 18 h rain-out time) with a "
    "sea source and near and far land receptors was run with and without an intervention that raises source evaporation "
    "by 5% or 20% and, optionally, changes rain efficiency (δk) or transport speed (δu) in a box downwind of the source. "
-   "The true externality is the difference of the two runs; the supply estimator uses Eq. (5) with baseline tagging.")
+   "The true externality is the difference of the two runs; the supply estimator uses Eq. (5) with baseline tagging. "
+   f"The grid (δk ∈ {{{V['kt_dk']}}}, δu ∈ {{{V['kt_du']}}}) was fixed before the runs and is not a physical prior, so counts of sign "
+   "reversals are conditional on it. Here the no-intervention world is the observed baseline; in the real application the "
+   "observed state already contains the fleet and the no-fleet state is the counterfactual. The identification argument "
+   "is symmetric, but the numerical errors apply to the synthetic orientation only.")
 
 H("3.5. Paired regional simulations", 2)
 Pp(f"WRF v4.6.1 was run on a single Lambert domain of {V['w_nx']} × {V['w_ny']} cells at {V['w_dx_km']} km with "
@@ -210,9 +234,14 @@ Pp(f"WRF v4.6.1 was run on a single Lambert domain of {V['w_nx']} × {V['w_ny']}
    f"({V['w_cap_min']:.1f}–{V['w_cap_max']:.1f} GW) represented by the Fitch parameterisation {c('fitch2012')} with TKE "
    f"factor {V['w_tke']}. CONTROL and WIND differ only in this switch. Internal variability is sampled by three "
    f"additional no-wind runs whose initial potential temperature in the lowest ten levels is perturbed by Gaussian noise "
-   f"(σ = 0.01 K, fixed seeds). A WIND − CONTROL difference is called distinguishable when it lies outside the 95% "
-   f"prediction interval of the {V['w_nens']}-member no-wind ensemble (ensemble mean ± t₀.₉₇₅,ₙ₋₁·s·√(1 + 1/n), n = {V['w_nens']}); with about 20 receptor countries, one flag per "
-   f"event is expected by chance.")
+   f"(σ = 0.01 K, fixed seeds). A WIND − CONTROL difference is called distinguishable when WIND lies outside the 95% "
+   f"prediction interval derived from the {V['w_nens']}-member no-wind ensemble (ensemble mean ± t₀.₉₇₅,ₙ₋₁·s·√(1 + 1/n), n = {V['w_nens']}). "
+   "Nominal coverage assumes that, without an effect, WIND is exchangeable with the no-wind members and that country "
+   "totals are approximately normal. CONTROL is the unperturbed member from which the others diverge, and the spread "
+   "grows from near zero, so these assumptions were checked rather than assumed: by Monte Carlo coverage under "
+   "CONTROL-centred dependence, by a leave-one-out placebo in which each no-wind member is tested against the other "
+   "three, and by the time evolution of spread in the 3-hourly output (Section 4.8). With about 20 spatially dependent "
+   f"receptor countries, about one flag per event is expected by chance; counts are descriptive.")
 
 H("4. Results")
 H("4.1. Verification", 2)
@@ -223,9 +252,10 @@ H("4.2. Known-truth recovery", 2)
 Pp(f"Without dynamic perturbation the supply estimator reproduced the true externality to a relative error of "
    f"{V['kt_lin_err']:.1e} (Fig. 3). With a dynamic channel the median absolute relative error was "
    f"{pct(V['kt_dyn_med'],0)} (maximum {pct(V['kt_dyn_max'],0)}); the sign was wrong in {V['kt_flip']} of "
-   f"{V['kt_n_dyn']} cases ({V['kt_flip_c2']} of {V['kt_n_c2']} at the far receptor), because a downwind change in transport speed or "
+   f"{V['kt_n_dyn']} configurations ({V['kt_flip_c2']} of {V['kt_n_c2']} at the far receptor), because a downwind change in transport speed or "
    f"rain efficiency redistributes background moisture that the tag does not see. Treating accounting A(S→c) as the "
-   f"externality was wrong by at least a factor of {1 + V['kt_acc_min']:.1f}.")
+   f"externality was wrong by at least a factor of {1 + V['kt_acc_min']:.1f}. These counts describe the prespecified grid; "
+   "they show that sign reversal occurs for modest dynamic perturbations, not how probable it is in the atmosphere.")
 H("4.3. European accounting [A]", 2)
 Pp(f"Across seasons, {pct(V['land_mean'])} (range {pct(V['land_min'])}–{pct(V['land_max'])}) of farm-cell evaporation "
    f"precipitated over land inside the domain, {pct(V['sea_mean'])} over sea, and {pct(V['out_mean'])} left the domain "
@@ -254,20 +284,34 @@ Pp(f"All {V['w_runs']} simulations (domain and turbines in Fig. 7) completed wit
    f"≥{V['w_vrW_min']:.2f} (Fig. 8). In farm cells, WIND − CONTROL hub-height wind changed by {fmt_m(V['w_hub_min'])} to "
    f"{fmt_m(V['w_hub_max'])} m s⁻¹ and boundary-layer height by {V['w_pblh_min']:+.0f} to {V['w_pblh_max']:+.0f} m, at a "
    f"simulated fleet output of {V['w_pow_min']:.1f}–{V['w_pow_max']:.1f} GW. Within 30 km of farms the RMS "
-   f"hub-wind contrast was {V['w_sn_hub_near_min']:.1f}–{V['w_sn_hub_near_max']:.1f} times the RMS spread of the no-wind "
-   f"members, and the boundary-layer-height contrast {V['w_sn_pblh_near_min']:.1f}–{V['w_sn_pblh_near_max']:.1f} times "
+   f"hub-wind contrast was {V['w_sn_hub_near_min']:.1f}–{V['w_sn_hub_near_max']:.1f} times the mean RMS difference between each perturbed no-wind "
+   f"member and CONTROL, and the boundary-layer-height contrast {V['w_sn_pblh_near_min']:.1f}–{V['w_sn_pblh_near_max']:.1f} times "
    f"(Fig. 9). Beyond 150 km the hub-wind ratio was at most {V['w_sn_hub_far_max']:.2f}.")
 H("4.7. Cross-border precipitation contrasts [C]", 2)
 Pp(f"Beyond 150 km from farms the precipitation contrast was {V['w_sn_p_far_min']:.2f}–{V['w_sn_p_far_max']:.2f} "
-   f"times the internal spread (Fig. 9; maps in Fig. 10), and the inner-domain precipitation total changed by {pct(V['w_dP_tot_min'],2)} "
+   f"times the corresponding no-wind reference (Fig. 9; maps in Fig. 10), and the inner-domain precipitation total changed by {pct(V['w_dP_tot_min'],2)} "
    f"to {pct(V['w_dP_tot_max'],2)}. Of {V['w_N']} country–event contrasts, {V['w_K']} lay outside the no-wind prediction "
    f"interval against {V['w_expK']:.0f} expected by chance (binomial probability of at least {V['w_K']} flags {V['w_pbin']:.2f}; tests are not "
    f"independent), and {V['w_rep2']} of {V['w_ncty']} countries were flagged in more than one event (Fig. 11). The "
    f"supply-channel scenario, the precipitation that farm-cell evaporation changes in WRF would deliver with unchanged "
    f"dynamics, was a median {V['w_S_noise_med']:.1e} (maximum {V['w_S_noise_max']:.1e}) of the internal-variability "
-   f"half-width. Country-level contrasts are therefore dominated by the dynamic channel and by chaotic variability, not "
-   f"by moisture supply, and no single-country source attribution is possible because only all-fleet interventions "
+   f"half-width. Country-level contrasts are therefore not explained by moisture supply; a single WIND member cannot "
+   f"separate the dynamic response from chaotic variability, and no single-country source attribution is possible because only all-fleet interventions "
    f"were simulated.")
+
+H("4.8. Calibration of the internal-variability reference [C]", 2)
+Pp(f"In the archived 3-hourly output of all {V['sg_n']} events the no-wind spread beyond 150 km grew from near zero and "
+   f"over the final 24 h reached at most {pct(V['sg_sat_max'],0)} of the temporal standard deviation of CONTROL for hub-height wind, "
+   f"column vapour, |IVT| and 3-h precipitation; in {V['sg_grow']} of {V['sg_n']} events it was still increasing (Fig. 12). Saturation "
+   f"cannot therefore be established, and the interval may underestimate internal variability at longer lead times. The ratio "
+   f"of perturbed–perturbed to CONTROL–perturbed distances was {V['sg_rpp_min']:.2f}–{V['sg_rpp_max']:.2f}, closer to 1 "
+   f"(exchangeable) than to √2 (CONTROL-centred). For the country totals the pooled dependence estimate implies a "
+   f"coverage of {pct(V['pa_cov'],1)} for the nominal 95% interval (Monte Carlo; {pct(V['pa_cov_c1'],1)} for strongly "
+   f"CONTROL-centred members and {pct(V['pa_cov_t3'],1)} for heavy-tailed i.i.d. members), and the leave-one-out placebo flagged "
+   f"{V['pa_loo']} of {V['pa_loo_n']} no-wind members ({pct(V['pa_loo_lo'],1)}–{pct(V['pa_loo_hi'],1)}, 95% CI). The number of "
+   f"countries flagged varied between {V['sg_fl_min']} and {V['sg_fl_max']} over the analysis window, so the end-of-window count is one "
+   f"realisation of a fluctuating quantity. The interval is approximately calibrated for the present spread but not for "
+   f"a saturated ensemble.")
 
 t = doc.add_table(rows=1, cols=4); t.style = "Table Grid"
 for i, h in enumerate(["Owner", "Own land a", "Foreign land a", "Foreign/own"]): t.rows[0].cells[i].text = h
@@ -298,7 +342,8 @@ Pp("The paired simulations add a third statement. The parameterised fleet decele
    "estimates can misstate even the sign of an externality is not an academic concern. These are model-conditional "
    "contrasts: a different parameterisation, resolution, TKE factor, domain or season sample could give different "
    "responses, the ensembles are small, and the simulations do not represent soil moisture, groundwater or freshwater "
-   "availability beyond five days of land-surface response. They bound what this configuration can support, rather "
+   "availability beyond five days of land-surface response. A contrast that is not distinguishable from internal "
+   "variability is not evidence of zero effect. The results delimit what this configuration can support, rather "
    "than measuring a real-world externality. Governance applications should cite [A], [S] and [C] results only with "
    "their labels.")
 H("6. Conclusions")
@@ -306,7 +351,8 @@ Pp(f"Source–receptor accounting of offshore wind-farm evaporation in Europe is
    f"externality estimate: placebo sources reproduce {V['pl_inside']} of {V['pl_n']} coefficients, the computable supply channel fails in "
    f"known-truth worlds when dynamics change, and the signal is undetectable observationally. In paired WRF "
    f"simulations the fleet changes near-farm winds and boundary layers clearly, while cross-border precipitation "
-   f"contrasts remain within internal variability for the simulated events. The released tools make these "
+   f"contrasts are not distinguishable from the internal variability of small, unsaturated ensembles for the simulated "
+   f"events. The released tools make these "
    f"distinctions explicit and testable.")
 
 H("Software and data availability")
@@ -333,9 +379,10 @@ caps = ["Fig. 1. Framework: accounting [A], supply scenario [S] and model-condit
         "Fig. 6. Fractional change in farm-cell evaporation required to detect the supply channel in national summer precipitation.",
         "Fig. 7. WRF domain, inner analysis region and Fitch turbine locations for each simulated event.",
         "Fig. 8. CONTROL simulations against ERA5: relative bias and spatial correlation.",
-        "Fig. 9. Ratio of RMS WIND − CONTROL contrast to RMS no-wind ensemble spread by distance from farms [C].",
+        "Fig. 9. Ratio of RMS WIND − CONTROL difference to the mean RMS difference between each perturbed no-wind run and CONTROL, by distance from farms [C].",
         "Fig. 10. Accumulated precipitation difference after spin-up: WIND − CONTROL (top) and one no-wind perturbed run − CONTROL (bottom) [C].",
-        "Fig. 11. Country precipitation contrasts WIND − CONTROL against the 95% prediction interval of the no-wind ensemble [C]."]
+        "Fig. 11. Country precipitation contrasts WIND − CONTROL against the 95% prediction interval derived from the four-member no-wind ensemble [C].",
+        "Fig. 12. Time evolution of the no-wind ensemble spread beyond 150 km from farms relative to the temporal standard deviation of CONTROL, member-distance ratio, and number of countries outside the 95% prediction interval [C]."]
 for cp in caps: Pp(cp)
 # figure citation order check is in QC; reference list
 H("References")
@@ -355,7 +402,7 @@ HL = [f"Transboundary water externalities defined as counterfactual precipitatio
       f"Supply-only estimates fail in known-truth worlds when dynamics change",
       f"{pct(V['land_mean'],0)} of offshore farm-cell evaporation rains on land, mostly abroad",
       f"Placebo sources reproduce {V['pl_inside']} of {V['pl_n']} receptor transfer coefficients",
-      f"Paired WRF runs: cross-border rain contrasts within internal variability"]
+      f"Paired WRF runs: cross-border rain contrasts not distinguishable from ensemble spread"]
 HL = [HL[0], HL[2], HL[3], HL[4], HL[5]]
 hd = Document(); hd.add_heading("Highlights", 1)
 for h in HL: hd.add_paragraph(h, style="List Bullet")

@@ -2,4 +2,4 @@ Transboundary water externalities defined as counterfactual precipitation change
 Supply-only estimates fail in known-truth worlds when dynamics change
 20% of offshore farm-cell evaporation rains on land, mostly abroad
 Placebo sources reproduce 24 of 24 receptor transfer coefficients
-Paired WRF runs: cross-border rain contrasts within internal variability
+Paired WRF runs: cross-border rain contrasts not distinguishable from ensemble spread

@@ -18,7 +18,7 @@ Performed on the rebuilt five-event package before final mechanical QC. Each per
 ## 3. Atmospheric scientist
 - *Five events, all with strong onshore transport; no convective or blocked regimes.* **Disclosed** (season sample limitation; events prespecified from ERA5 alone, before any treatment output was inspected).
 - *CONTROL precipitation bias vs ERA5 (+15% to +38%).* Reported with spatial correlation; northward-IVT relative bias removed from Fig. 8 because it is undefined for a near-zero mean. **Fixed/disclosed.**
-- *σ = 0.01 K perturbations may under-sample spread in the first days.* The time evolution of ensemble spread was not analysed; the far-field ratio of ~1 beyond 150 km indicates that spread had grown to the size of the WIND − CONTROL contrast by the end of the window. **Disclosed** small ensembles; spread growth not assessed (open).
+- *σ = 0.01 K perturbations may under-sample spread in the first days.* Analysed in the final calibration gate from archived 3-hourly output of all five events (WRF_ENSEMBLE_SPREAD_GROWTH.md, Fig. 12): spread is far below the temporal SD and saturation is not established. Prediction-interval assumptions audited by Monte Carlo coverage and a leave-one-out placebo (WRF_PREDICTION_INTERVAL_AUDIT.md). **Disclosed** in Sections 3.5 and 4.8: the interval may underestimate internal variability; non-detection is not evidence of zero effect.
 
 ## 4. Hydrologist
 - *Precipitation is not freshwater availability.* Simulations last five days; soil moisture, groundwater and runoff responses are not represented. **Disclosed** in Discussion; WRF_SOURCE_RECEPTOR_REPORT.md separates ΔP from these quantities.
@@ -50,6 +50,11 @@ Performed on the rebuilt five-event package before final mechanical QC. Each per
 - *Hard-coded numbers.* Mutation tests across abstract, results, conclusions, table, highlights and cover letter pass (HARDCODE_AUDIT.md); 0 unmatched numeric tokens.
 - *Restoration without re-downloading sources.* See FRESH_VM_RESTORATION_AUDIT.md and PRIVATE_ARCHIVE_REPRODUCIBILITY.md.
 - *WRF outputs are private.* Stated in the availability section; configuration (namelists, turbine tables, run_config.json) and per-event analysis results are public. **Disclosed.**
+
+## Final calibration gate addendum
+- *Structural vs numerical non-identifiability conflated; 10/14 read as a probability.* **Fixed**: IDENTIFIABILITY_AUDIT.md separates (A) structural, (B) grid-conditional, (C) WRF empirical uncertainty; manuscript Sections 2.2, 3.4, 4.2.
+- *Finite-grid maximum used as if a physical bound; |C − S| read as a bound.* **Fixed**: PARTIAL_IDENTIFICATION_REPORT.md and Eq. (6) distinguish imposed, finite-grid, statistical and physical bounds.
+- *Fig. 9 denominator described as 'ensemble spread'.* **Fixed**: it is the mean RMS(CTLPERT_k − CONTROL) (SEMANTIC_CODE_AUDIT.md).
 
 ## Residual open items
 1. Author placeholders (affiliation, ORCID, e-mail, GenAI declaration, acknowledgements) — author action.
