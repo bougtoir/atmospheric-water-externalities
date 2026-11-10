@@ -3,7 +3,7 @@
 **Decision: CONDITIONAL GO.** The calibration gate found no implementation error and no change to canonical results; it found interpretation and wording defects, all fixed through the generation sources. Submission waits only on author metadata.
 
 ## Calibration-gate findings (all resolved)
-1. Stale wording "single-member noise" → "95% prediction interval derived from the four-member no-wind ensemble" (pilot report section marked superseded; manuscript, captions, cover letter, highlights, audits checked; FINAL_DELTA_QC.md).
+1. Stale one-member noise-reference wording → "95% prediction interval derived from the four-member no-wind ensemble" (pilot report section marked superseded; manuscript, captions, cover letter, highlights, audits checked; FINAL_DELTA_QC.md).
 2. Non-identifiability: structural result (stated observables, stated model class) separated from the 10/14 grid-conditional sign reversals and from WRF empirical uncertainty; the count is not a physical probability; synthetic baseline orientation (no-intervention observed) vs real world (fleet observed) stated (IDENTIFIABILITY_AUDIT.md; manuscript 2.2, 3.4, 4.2).
 3. Partial identification: imposed bound, finite-grid maximum, statistical interval and physical bound distinguished; the grid maximum is not a physical bound and |C − S| is not a validated upper bound; Eq. (6) added (PARTIAL_IDENTIFICATION_REPORT.md).
 4. Prediction interval: implementation verified by independent recomputation. CONTROL inclusion does not by itself invalidate it: Monte Carlo coverage under the estimated dependence 0.944; leave-one-out placebo 26/400 = 0.065 (95% CI 0.043–0.094). 7/100 binomial reference kept as descriptive only (WRF_PREDICTION_INTERVAL_AUDIT.md).

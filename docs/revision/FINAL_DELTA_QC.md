@@ -9,9 +9,9 @@ Fig. 12, captions of Figs. 9 and 11, abstract, discussion, conclusions, highligh
 |---|---|---|---|
 | mechanical | g9_qc formal QC | PASS | ALL PASS |
 | semantic | g10 semantic code audit | PASS | Overall: ALL PASS (21/21). |
-| mechanical | pytest | PASS | 5 passed in 0.13s |
+| mechanical | pytest | PASS | 5 passed in 0.12s |
 | mechanical | g9b audits (numeric provenance, hard-code mutation, references, figures/tables, OMML, integrity) | PASS | see *_AUDIT.md; run before this script |
-| wording | no 'single[- ]member noise' (stale terminology) | FAIL | docs/revision/EMS_GO_NO_GO.md |
+| wording | no 'single[- ]member noise' (stale terminology) | PASS |  |
 | wording | no 'remain within internal variability' (positive null claim) | PASS |  |
 | wording | no 'spread (had )?saturated|saturated before' (unsupported saturation) | PASS |  |
 | wording | no '(?<!not )(?<!not a )validated upper bound' (|C−S| as bound) | PASS |  |
@@ -35,4 +35,4 @@ Fig. 12, captions of Figs. 9 and 11, abstract, discussion, conclusions, highligh
 | refs | reference list unchanged in count (no new citations needed) | PASS | 27 references |
 | numbers | canonical scientific results unchanged (WRF flags, known truth) | PASS |  |
 
-Overall: FAILURES PRESENT (26/27).
+Overall: ALL PASS (27/27).
