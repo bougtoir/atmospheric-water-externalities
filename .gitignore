@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+data/raw/era5/*.nc
+data/raw/era5/*.part
+data/processed/track_*.npz
+logs/
+data/raw/era5_wrf/*.nc
+data/raw/era5_wrf/*.part
+data/raw/wps_geog/
+wrf_runs/
+.archive/
+figures/wrf/

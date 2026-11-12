@@ -1,0 +1,22 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 1,
+ start_date = '{start}',
+ end_date   = '{end}',
+ interval_seconds = 10800,
+/
+&geogrid
+ parent_id = 1, parent_grid_ratio = 1, i_parent_start = 1, j_parent_start = 1,
+ e_we = {e_we}, e_sn = {e_sn},
+ geog_data_res = 'lowres',
+ dx = {dx}, dy = {dx},
+ map_proj = 'lambert',
+ ref_lat = 54.0, ref_lon = 8.0, truelat1 = 50.0, truelat2 = 58.0, stand_lon = 8.0,
+ geog_data_path = '{geog}',
+/
+&ungrib
+ out_format = 'WPS', prefix = 'ERA5',
+/
+&metgrid
+ fg_name = 'ERA5',
+/

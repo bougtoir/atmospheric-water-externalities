@@ -1,0 +1,26 @@
+{
+ "case": "e2016sw",
+ "namelist_WIND": {
+  "dx": 15000.0,
+  "e_we": 141.0,
+  "e_sn": 111.0,
+  "e_vert": 45.0,
+  "time_step": 60.0,
+  "p_top_requested": 5000.0,
+  "mp_physics": 8.0,
+  "ra_lw_physics": 4.0,
+  "ra_sw_physics": 4.0,
+  "sf_sfclay_physics": 5.0,
+  "sf_surface_physics": 2.0,
+  "bl_pbl_physics": 5.0,
+  "cu_physics": 1.0,
+  "windfarm_opt": 1.0,
+  "windfarm_tke_factor": 0.25
+ },
+ "turbines": {
+  "date": "2016-08-03",
+  "countries": "ALL",
+  "n_turbines": 3141,
+  "capacity_mw": 11184.260000000002
+ }
+}

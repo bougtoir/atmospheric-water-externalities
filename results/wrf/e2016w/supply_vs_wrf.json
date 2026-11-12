@@ -1,0 +1,11 @@
+{
+ "case": "e2016w",
+ "year": 2016,
+ "dE_farm_kg": 1448162560.0,
+ "n_countries": 19,
+ "sum_abs_S_kg": 243007068.65482035,
+ "sum_abs_C_kg": 113672737514.0,
+ "n_same_sign": 8,
+ "n_C_exceeds_noise": 0,
+ "noise_reference": "no-wind ensemble n=4 (95% prediction interval)"
+}

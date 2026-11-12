@@ -1,0 +1,146 @@
+{
+ "n_offshore": 9059,
+ "n_missing_commissioning": 197,
+ "2016": {
+  "capacity_mw": 15839.014,
+  "n_cells": 77,
+  "owners": {
+   "BE": 3,
+   "DE": 16,
+   "DK": 18,
+   "GB": 32,
+   "IE": 1,
+   "NL": 4,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 29,
+  "placebo": [
+   77,
+   77,
+   77,
+   77,
+   77
+  ]
+ },
+ "2017": {
+  "capacity_mw": 19355.468,
+  "n_cells": 86,
+  "owners": {
+   "BE": 4,
+   "DE": 22,
+   "DK": 18,
+   "GB": 32,
+   "IE": 1,
+   "NL": 6,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 28,
+  "placebo": [
+   86,
+   86,
+   86,
+   86,
+   86
+  ]
+ },
+ "2018": {
+  "capacity_mw": 21862.718,
+  "n_cells": 91,
+  "owners": {
+   "BE": 4,
+   "DE": 24,
+   "DK": 18,
+   "GB": 35,
+   "IE": 1,
+   "NL": 6,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 30,
+  "placebo": [
+   91,
+   91,
+   91,
+   91,
+   91
+  ]
+ },
+ "2019": {
+  "capacity_mw": 26126.818,
+  "n_cells": 99,
+  "owners": {
+   "BE": 4,
+   "DE": 26,
+   "DK": 18,
+   "GB": 41,
+   "IE": 1,
+   "NL": 6,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 34,
+  "placebo": [
+   99,
+   99,
+   99,
+   99,
+   99
+  ]
+ },
+ "2020": {
+  "capacity_mw": 30631.078,
+  "n_cells": 105,
+  "owners": {
+   "BE": 4,
+   "DE": 26,
+   "DK": 18,
+   "GB": 47,
+   "IE": 1,
+   "NL": 6,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 35,
+  "placebo": [
+   105,
+   105,
+   105,
+   105,
+   105
+  ]
+ },
+ "2021": {
+  "capacity_mw": 34102.828,
+  "n_cells": 108,
+  "owners": {
+   "BE": 3,
+   "DE": 25,
+   "DK": 20,
+   "GB": 48,
+   "IE": 1,
+   "NL": 8,
+   "NO": 1,
+   "SE": 2
+  },
+  "n_clusters": 36,
+  "placebo": [
+   108,
+   108,
+   108,
+   108,
+   108
+  ]
+ },
+ "receptors_partly_outside_domain": [
+  "CY",
+  "DZ",
+  "IS",
+  "MA",
+  "RU",
+  "TN",
+  "TR",
+  "UA"
+ ]
+}
