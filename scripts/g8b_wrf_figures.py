@@ -1,0 +1,120 @@
+"""WRF figures (separate files, regenerated from results/wrf/*/ and run configuration files; no hand-typed values).
+
+Outputs figures/wrf/Figure_W<n>.{png,pdf}. Contrasts are model-conditional WRF v4.6.1 WIND-CONTROL differences."""
+import glob, json, os, pathlib, re
+import numpy as np, pandas as pd, xarray as xr, matplotlib
+from scipy import stats
+matplotlib.use("Agg"); import matplotlib.pyplot as plt
+
+F = pathlib.Path("figures/wrf"); F.mkdir(parents=True, exist_ok=True)
+plt.rcParams.update({"font.size": 8, "font.family": "DejaVu Sans"})
+cases = sorted(os.path.basename(os.path.dirname(p)) for p in glob.glob("results/wrf/*/maps.nc"))
+NOWE = ["CONTROL", "CTLPERT_1", "CTLPERT_2", "CTLPERT_3"]
+def save(fig, n):
+    fig.savefig(F / f"Figure_W{n}.png", dpi=600, bbox_inches="tight"); fig.savefig(F / f"Figure_W{n}.pdf", bbox_inches="tight", metadata={"CreationDate": None}); plt.close(fig)
+mp = {c: xr.open_dataset(f"results/wrf/{c}/maps.nc") for c in cases}
+members = {c: sorted({m.group(1) for v in mp[c].data_vars if (m := re.match(r"P_acc_mm_(CTLPERT_\d+)$", v))}) for c in cases}
+
+# W1: domain, inner analysis region and turbine locations per case
+m0 = mp[cases[0]]; lat, lon = m0.lat.values, m0.lon.values
+fig, ax = plt.subplots(figsize=(6, 4.6))
+ax.contourf(lon, lat, (m0.country.values != "").astype(float) if m0.country.dtype.kind in "OUS" else (m0.country.values > 0).astype(float),
+            levels=[-.5, .5, 1.5], colors=["#dfefff", "#e8e8e8"])
+ax.contour(lon, lat, m0.inner.values.astype(float), levels=[.5], colors="k", linewidths=.8, linestyles="--")
+ax.plot(np.r_[lon[0], lon[:, -1], lon[-1, ::-1], lon[::-1, 0]], np.r_[lat[0], lat[:, -1], lat[-1, ::-1], lat[::-1, 0]], "k-", lw=1)
+tl = {c: np.loadtxt(f"results/wrf/{c}/windturbines.txt") for c in cases}
+col = dict(zip(cases, plt.cm.tab10.colors))
+same = {c: [o for o in tl if o != c and tl[o].shape == tl[c].shape and np.array_equal(tl[o], tl[c])] for c in tl}
+done = set()
+for c in sorted(tl, key=lambda c: -len(tl[c])):  # largest fleet first so smaller fleets stay visible
+    if c in done:
+        continue
+    grp = sorted([c] + same[c]); done.update(grp)
+    ax.scatter(tl[c][:, 1], tl[c][:, 0], s=.6, color=col[c], label=f"{' = '.join(grp)}: {len(tl[c])} turbines")
+ax.set_xlabel("Longitude (°E)"); ax.set_ylabel("Latitude (°N)"); ax.legend(markerscale=12, fontsize=6, loc="upper left")
+ax.set_title("WRF domain (15 km), inner analysis region (dashed) and Fitch turbines"); save(fig, 1)
+
+# W2: precipitation contrast maps, WIND-CONTROL and first noise member minus CONTROL
+nc = len(cases); fig, axs = plt.subplots(2, nc, figsize=(2.6 * nc, 4.6), squeeze=False)
+for k, c in enumerate(cases):
+    m = mp[c]; ref = m.P_acc_mm_CONTROL.values
+    rows = [("WIND", m.P_acc_mm_WIND.values - ref)]
+    rows.append((members[c][0], m[f"P_acc_mm_{members[c][0]}"].values - ref) if members[c] else ("no noise member", np.full_like(ref, np.nan)))
+    for r, (nm, d) in enumerate(rows):
+        a = axs[r, k]; im = a.pcolormesh(lon, lat, d, cmap="BrBG", vmin=-10, vmax=10, shading="auto")
+        a.contour(lon, lat, m.farm.values.astype(float), levels=[.5], colors="m", linewidths=.5)
+        a.set_title(f"{c}\n{nm} − CONTROL", fontsize=7); a.set_xticks([]); a.set_yticks([])
+fig.colorbar(im, ax=axs, shrink=.7, label="Δ accumulated precipitation (mm, post-spin-up)"); save(fig, 2)
+
+# W3: RMS(WIND-CONTROL)/RMS(noise-CONTROL) by distance band
+sn = {c: json.load(open(f"results/wrf/{c}/signal_noise.json")) for c in cases if os.path.exists(f"results/wrf/{c}/signal_noise.json")}
+LBL = {"hub_wind": "hub-height wind", "PBLH": "boundary-layer height", "IVTx": "eastward vapour flux", "E_acc_mm": "evaporation", "P_acc_mm": "precipitation"}
+fl = ["hub_wind", "PBLH", "IVTx", "E_acc_mm", "P_acc_mm"]; bands = ["farm_0_30km", "near_30_150km", "far_gt150km"]
+fig, axs = plt.subplots(1, len(fl), figsize=(8.0, 2.6), sharey=True)
+for a, f in zip(axs, fl):
+    for c, col in zip(cases, plt.cm.tab10.colors):
+        if c in sn and f in sn[c]["fields"]:
+            a.plot(range(3), [sn[c]["fields"][f][b]["ratio"] for b in bands], "o-", color=col, label=c, ms=3)
+    a.axhline(1, color="k", lw=.6, ls=":"); a.set_xticks(range(3)); a.set_xticklabels(["0–30", "30–150", ">150"], fontsize=6, rotation=30)
+    a.set_title(LBL.get(f, f), fontsize=7); a.set_yscale("log"); a.set_xlabel("km from farm")
+axs[0].set_ylabel("RMS signal / RMS noise"); axs[-1].legend(fontsize=5); save(fig, 3)
+
+# W4: country precipitation contrast vs no-wind ensemble prediction interval
+fig, axs = plt.subplots(len(cases), 1, figsize=(7.2, 2.1 * len(cases)), squeeze=False, gridspec_kw=dict(hspace=0.75))
+for a, c in zip(axs[:, 0], cases):
+    p = f"results/wrf/{c}/country_signal_noise.csv"
+    if not os.path.exists(p) or "pi_halfwidth_kg" not in open(p).readline(): a.set_title(f"{c}: no-wind ensemble not yet available", fontsize=7); a.axis("off"); continue
+    d = pd.read_csv(p).sort_values("country"); x = np.arange(len(d))
+    a.errorbar(x, d.ens_mean_minus_control_kg / 1e9, yerr=d.pi_halfwidth_kg / 1e9, fmt="none", ecolor="0.6", capsize=1.5,
+               label="no-wind ensemble 95% prediction interval")
+    o = d.outside_internal_variability.values
+    a.scatter(x[~o], d.dP_wind_kg[~o] / 1e9, s=8, c="k", zorder=3, label="WIND − CONTROL (inside interval)")
+    a.scatter(x[o], d.dP_wind_kg[o] / 1e9, s=10, c="r", zorder=3, label="WIND − CONTROL (outside interval)")
+    a.axhline(0, color="k", lw=.5); a.set_xticks(x); a.set_xticklabels(d.country, fontsize=6); a.set_ylabel("ΔP (Mt)")
+    a.set_title(f"{c} (n = {json.load(open(f'results/wrf/{c}/signal_noise.json'))['n_no_wind_ensemble']} no-wind runs)", fontsize=7)
+axs[0, 0].legend(fontsize=6); save(fig, 4)
+
+# W5: CONTROL vs ERA5 (driving reanalysis) relative bias and spatial correlation
+va = {c: json.load(open(f"results/wrf/{c}/validation.json")) for c in cases if os.path.exists(f"results/wrf/{c}/validation.json")}
+vf = sorted({f for v in va.values() for f in v["fields"]})
+RELB = {"P_acc_mm", "E_acc_mm", "W", "IVTx"}  # relative bias undefined for IVTy (domain mean near zero, sign-changing)
+VL = {"P_acc_mm": "precipitation", "E_acc_mm": "evaporation", "W": "column water", "IVTx": "eastward IVT", "IVTy": "northward IVT"}
+fig, axs = plt.subplots(1, 2, figsize=(7.2, 2.6))
+for i, c in enumerate(va):
+    w = .8 / len(va)
+    axs[0].bar(np.arange(len(vf)) + i * w, [va[c]["fields"].get(f, {}).get("rel_bias", np.nan) if f in RELB else np.nan for f in vf], w, label=c)
+    axs[1].bar(np.arange(len(vf)) + i * w, [va[c]["fields"].get(f, {}).get("spatial_r", np.nan) for f in vf], w)
+for a, t in zip(axs, ["relative bias vs ERA5 (not defined for northward IVT)", "spatial correlation vs ERA5"]):
+    a.set_xticks(np.arange(len(vf)) + .4 - .4 / len(va)); a.set_xticklabels([VL.get(f, f) for f in vf], rotation=45, fontsize=6); a.set_title(t, fontsize=7); a.axhline(0, color="k", lw=.5)
+axs[0].legend(fontsize=5); save(fig, 5)
+# W6: temporal evolution of the no-wind ensemble spread (archived 3-hourly output; scripts/wrf/w18_spread_growth.py)
+sg = {c: pd.read_csv(f"results/wrf/{c}/spread_growth.csv", parse_dates=["time"]) for c in cases if os.path.exists(f"results/wrf/{c}/spread_growth.csv")}
+SL = {"hub_wind": "hub-height wind", "P_3h": "3-h precipitation", "W": "column water vapour", "IVT": "|IVT|"}
+fig, axs = plt.subplots(2, 3, figsize=(7.2, 4.4)); axs = axs.ravel()
+for i, (f, lab) in enumerate(SL.items()):
+    a = axs[i]
+    for c, d in sg.items():
+        x = d[(d.field == f) & (d.band == "far_gt150km")]
+        a.plot(x.lead_h, x.spread / x.sigma_time, lw=.8, label=c)
+    a.axvline(24, color="0.5", ls=":", lw=.6); a.set_title(f"{lab}, > 150 km from farms", fontsize=7)
+    a.set_xlabel("lead time (h)", fontsize=6); a.set_ylabel("spread / temporal SD", fontsize=6); a.tick_params(labelsize=6)
+a = axs[4]
+for c, d in sg.items():
+    x = d[(d.field == "hub_wind") & (d.band == "far_gt150km") & d.in_window]
+    a.plot(x.lead_h, x.d_pert_pert / x.d_ctl_pert, lw=.8)
+a.axhline(1, color="k", lw=.5); a.axhline(np.sqrt(2), color="r", lw=.5, ls="--")
+a.set_title("d(pert,pert) / d(CONTROL,pert), hub wind", fontsize=7); a.set_xlabel("lead time (h)", fontsize=6); a.tick_params(labelsize=6)
+a.text(0.02, 0.04, "1: exchangeable;  √2 (dashed): CONTROL-centred", transform=a.transAxes, fontsize=5)
+a = axs[5]
+for c in sg:
+    q = pd.read_csv(f"results/wrf/{c}/country_precip_time.csv", parse_dates=["time"]).pivot_table(index=["time", "country"], columns="exp", values="P_acc_kg")
+    m, s_ = q[NOWE].mean(1), q[NOWE].std(1, ddof=1)
+    fl = ((q.WIND - m).abs() > stats.t.ppf(0.975, 3) * s_ * np.sqrt(1.25)).groupby(level=0).sum()
+    a.step((fl.index - fl.index[0]) / pd.Timedelta(hours=1), fl.values, lw=.8, where="post")
+a.set_title("countries outside the 95% prediction interval", fontsize=7); a.set_xlabel("hours after spin-up", fontsize=6); a.set_ylabel("count", fontsize=6); a.tick_params(labelsize=6)
+axs[0].legend(fontsize=5); fig.tight_layout(); save(fig, 6)
+import shutil
+for w, n in {1: 7, 5: 8, 3: 9, 2: 10, 4: 11, 6: 12}.items():  # manuscript numbering = order of first citation
+    for ext in ("png", "pdf"):
+        shutil.copyfile(F / f"Figure_W{w}.{ext}", pathlib.Path("figures") / f"Figure_{n}.{ext}")
+print("wrote", sorted(p.name for p in F.glob("*.png")), cases)

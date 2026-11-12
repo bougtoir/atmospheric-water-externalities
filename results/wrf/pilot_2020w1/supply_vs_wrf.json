@@ -1,0 +1,11 @@
+{
+ "case": "pilot_2020w1",
+ "year": 2020,
+ "dE_farm_kg": 2545196032.0,
+ "n_countries": 19,
+ "sum_abs_S_kg": 396836797.5315971,
+ "sum_abs_C_kg": 206684600530.0,
+ "n_same_sign": 7,
+ "n_C_exceeds_noise": 2,
+ "noise_reference": "no-wind ensemble n=4 (95% prediction interval)"
+}

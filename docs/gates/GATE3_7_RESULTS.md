@@ -8,12 +8,12 @@ Seasons: JJA 2016–2021 (6); tags per season: 12.
 | Numerical robustness | yes | CFL halving 0.4%, 3-hourly forcing 4.8% |
 | Known-truth recovery characterised | yes | exact without dynamics (7.2e-13); median error 53% with dynamics; 10/28 sign errors |
 | Falsification executed | yes | placebo: 24/24 receptors inside placebo range |
-| Causal TAWE estimate [C] | no | dynamic channel requires WRF counterfactual pair: NOT RUN |
+| Model-conditional WRF contrast [C] | yes | 5 events, WIND − CONTROL with 3-member no-wind IC ensembles; 7/100 country contrasts outside the no-wind 95% interval (model-conditional, not an observed causal effect) |
 | Generalisable EMS contribution | yes | definition + evidence classes + open tool + identifiability limits |
 
 ## Gate 7 decision: **CONDITIONAL GO** for Environmental Modelling & Software (research article)
 
-Conditions: (1) the paper is framed as a definition/tool/identifiability contribution and reports only [A] accounting and [S] scenario results;
-(2) the WRF counterfactual suite is declared designed-but-NOT-RUN and TAWE is stated as not identified;
+Conditions: (1) the paper is framed as a definition/tool/identifiability contribution with [A], [S] and [C] kept separate;
+(2) WRF contrasts are reported as model-conditional (single configuration, all-fleet interventions only; no country-specific source attribution);
 (3) no 'first'/'novel' priority claims; (4) model-structural uncertainty (single-layer tagging) is stated.
-A NO-GO would apply if the manuscript were required to report a causal TAWE magnitude.
+A NO-GO would apply if the manuscript were required to report an observed real-world causal TAWE magnitude.

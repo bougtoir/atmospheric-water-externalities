@@ -16,13 +16,13 @@ def save(fig, n):
 # Figure 1: framework schematic (accounting vs supply scenario vs dynamic counterfactual)
 fig, ax = plt.subplots(figsize=(7.2, 2.6)); ax.axis("off")
 boxes = [(0.02, "ERA5 column budget\nW, F, E, P (hourly)"), (0.27, "Forward tagging\nfrom farm cells S\n[A] accounting a(S→c)"),
-         (0.52, "Supply channel\nΔE_S · a(S→c)\n[S] scenario"), (0.77, "Dynamic channel\ncoupled counterfactual\n(WRF wind-farm scheme)\nNOT RUN")]
+         (0.52, "Supply channel\nΔE_S · a(S→c)\n[S] scenario"), (0.77, "Dynamic channel\nWRF WIND − CONTROL\n+ no-wind ensemble\n[C] model-conditional")]
 for x, t in boxes:
-    ax.add_patch(plt.Rectangle((x, 0.3), 0.21, 0.45, fill=False, lw=1)); ax.text(x + 0.105, 0.525, t, ha="center", va="center")
+    ax.add_patch(plt.Rectangle((x, 0.3), 0.21, 0.45, fill=False, lw=1)); ax.text(x + 0.105, 0.525, t, ha="center", va="center", fontsize=6.8)
 for x in (0.23, 0.48, 0.73):
     ax.annotate("", (x + 0.04, 0.525), (x, 0.525), arrowprops=dict(arrowstyle="->"))
 ax.text(0.5, 0.12, "TAWE(j→c) = Δ_supply + Δ_dynamic ;  validation: closure, analytic rain-out, placebo sources, known-truth worlds",
-        ha="center"); save(fig, 1)
+        ha="center", fontsize=7.5); save(fig, 1)
 
 # Figure 2: domain, farm cells (latest year) by owner, placebo cells
 yr = years[-1]; owner = M[f"owner_{yr}"]
@@ -49,7 +49,9 @@ axs[0].set_ylabel("Δ precipitation (10⁹ kg)"); axs[0].legend(fontsize=6); sav
 # Figure 4: mean tagged precipitation map (ALL tag), mm per season
 P = np.mean([np.load(f"data/processed/track_{y}.npz")["P_tag"][list(np.load(f"data/processed/track_{y}.npz")["names"]).index("ALL")] for y in years], axis=0)
 fig, ax = plt.subplots(figsize=(6, 4.2))
-im = ax.imshow(np.log10(np.maximum(P, 1e-6)), extent=ext, cmap="viridis", vmin=-3, vmax=1, aspect="auto")
+Pmm = P / area  # P_tag is kg per cell; kg m-2 = mm
+lv = np.log10(np.maximum(Pmm, 1e-9)); hi = np.ceil(np.nanmax(lv)); lo = hi - 4
+im = ax.imshow(lv, extent=ext, cmap="viridis", vmin=lo, vmax=hi, aspect="auto")
 ax.contour(lon, lat, land.astype(float), [0.5], colors="w", linewidths=0.4)
 plt.colorbar(im, ax=ax, label="log10 tagged precipitation (mm per JJA)"); ax.set_xlabel("Longitude (°E)"); ax.set_ylabel("Latitude (°N)")
 ax.set_title(f"Precipitation of farm-cell evaporation origin, JJA mean {years[0]}–{years[-1]}"); save(fig, 4)
